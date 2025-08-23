@@ -195,35 +195,90 @@ class _SearchScreenState extends State<SearchScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: List.generate(
                         results.length,
-                            (indexcontext) => InkWell(
-                              splashColor: Colors.transparent,
-                          onTap: () {
-                            context.pushNamed(
-                              PageUrl.getsubcatss,
-                              extra: SubCatParams(
-                                results[indexcontext].category!.id.toString(),
-                                results[indexcontext].subCategory!.id.toString(),
-                                results[indexcontext].category?.name ?? '',
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextView(
-                                    text: results[indexcontext].category?.name ?? '',
-                                  ),
-                                  const Divider(color: Pallets.grey95),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                            (indexcontext) => Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                                        onTap: () {
+                              context.pushNamed(
+                                PageUrl.getsubcatss,
+                                extra: SubCatParams(
+                                  results[indexcontext].category!.id.toString(),
+                                  results[indexcontext].subCategory!.id.toString(),
+                                  results[indexcontext].category?.name ?? '',
+                                ),
+                              );
+                                                        },
+                                                        child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child:
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.01),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Pallets.grey95.withOpacity(0.6),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Icon(Icons.shopping_bag, color: Pallets.grey75),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            results[indexcontext].subCategory?.name ?? '',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            results[indexcontext].category?.name ?? '',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+
+                              // Container(
+                              //   padding: const EdgeInsets.all(10),
+                              //   child: Column(
+                              //     crossAxisAlignment: CrossAxisAlignment.start,
+                              //     children: [
+                              //       TextView(
+                              //         text: results[indexcontext].subCategory?.name ?? '',
+                              //       ),
+                              //       const Divider(color: Pallets.grey95),
+                              //     ],
+                              //   ),
+                              // ),
+                                                        ),
+                                                      ),
+                                                    ),
+                            ),)
                     );
                   }
 

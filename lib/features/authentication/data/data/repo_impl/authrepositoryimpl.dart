@@ -104,9 +104,9 @@ class AuthRepositoryImpl extends AuthRepository {
       GooglePayload payload = GooglePayload(
         token: googleAuth.idToken,
       );
-      logger.w("Access Token: ${googleAuth.accessToken}");
+      // logger.w("Access Token: ${googleAuth.accessToken}");
       logger.w("ID Token: ${googleAuth.idToken}");
-      logger.w("Server Auth Code: ${googleAuth.serverAuthCode}");
+      // logger.w("Server Auth Code: ${googleAuth.serverAuthCode}");
       logger.w(payload.toJson());
 
       final response = await networkService.call(

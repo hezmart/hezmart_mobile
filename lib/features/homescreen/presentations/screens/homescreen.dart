@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +21,7 @@ import 'package:hezmart/features/homescreen/presentations/widgets/weekly_offer.d
 import 'package:hezmart/features/wishlist/data/data/repossitory_impl/repossitory_impl.dart';
 import 'package:hezmart/features/wishlist/presentations/fav_bloc/favourite_bloc.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:upgrader/upgrader.dart';
 
 import '../../../../common/widgets/custom_dialogs.dart';
 import '../../../../common/widgets/shimmer_box_widget.dart';
@@ -68,336 +71,317 @@ class _HomeScreenState extends State<HomeScreen> {
   GetAllProductsResponse? allResponse;
   final Set<String> likedProductIds = {};
 
+  Future<void> _refreshHome() async {
+    products.add(GetAllProductsEvent());
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: BlocConsumer<ProductsBloc, ProductsState>(
-          bloc: products,
-          listener: _listenToProductState,
-          builder: (context, state) {
-            if (state is ProductsFailiureState) {
-              return SizedBox(
-                height: 1.sh,
+      body: UpgradeAlert(
+        dialogStyle: Platform.isIOS
+        ? UpgradeDialogStyle.cupertino
+        : UpgradeDialogStyle.material,
+        shouldPopScope: ()=>true,
+    upgrader: Upgrader(
 
-                child: Center(
-                  child: AppPromptWidget(
-                    onTap: () {
-                      products.add(GetAllProductsEvent());
-                    },
-                  ),
-                ),
-              );
-            }
-            if (state is ProductsSuccessState) {
-              String formatNumberWithCommas(String number) {
-                try {
-                  final parsedNumber = double.parse(number.replaceAll(',', ''));
-                  return parsedNumber
-                      .toStringAsFixed(0)
-                      .replaceAllMapped(
-                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                        (Match m) => '${m[1]},',
-                      );
-                } catch (e) {
-                  return number;
-                }
-              }
+    durationUntilAlertAgain: Duration(
+    days: 2,
 
-              allResponse = state.response;
-              logger.w(state.response.data?.products.first.name ?? '');
-              final product = state.response.data?.products;
-              // final uniqueCategories = product!
-              //     .map((item) => item.category?.name)
-              //     .where((name) => name != null)
-              //     .toSet()
-              //     .toList();
-              final Map<String, List<Product>> productsByCategory = {};
+    ),
 
-              for (var item in product!) {
-                final categoryName = item.category?.name ?? 'Others';
-                if (!productsByCategory.containsKey(categoryName)) {
-                  productsByCategory[categoryName] = [];
-                }
-                productsByCategory[categoryName]!.add(item);
-              }
+    ),
+        child: SingleChildScrollView(
+          child: BlocConsumer<ProductsBloc, ProductsState>(
+            bloc: products,
+            listener: _listenToProductState,
+            builder: (context, state) {
+              if (state is ProductsFailiureState) {
+                return SizedBox(
+                  height: 1.sh,
 
-              return Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      color: Color(0xffE67002),
-                      child: Center(
-                        child: TextView(
-                          text: "Call To Order: 09160002490",
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
+                  child: Center(
+                    child: AppPromptWidget(
+                      onTap: () {
+                        products.add(GetAllProductsEvent());
+                      },
                     ),
-                    10.verticalSpace,
-                    Stack(
+                  ),
+                );
+              }
+              if (state is ProductsSuccessState) {
+                String formatNumberWithCommas(String number) {
+                  try {
+                    final parsedNumber = double.parse(number.replaceAll(',', ''));
+                    return parsedNumber
+                        .toStringAsFixed(0)
+                        .replaceAllMapped(
+                          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                          (Match m) => '${m[1]},',
+                        );
+                  } catch (e) {
+                    return number;
+                  }
+                }
+
+                allResponse = state.response;
+                logger.w(state.response.data?.products.first.name ?? '');
+                final product = state.response.data?.products;
+                // final uniqueCategories = product!
+                //     .map((item) => item.category?.name)
+                //     .where((name) => name != null)
+                //     .toSet()
+                //     .toList();
+                final Map<String, List<Product>> productsByCategory = {};
+
+                for (var item in product!) {
+                  final categoryName = item.category?.name ?? 'Others';
+                  if (!productsByCategory.containsKey(categoryName)) {
+                    productsByCategory[categoryName] = [];
+                  }
+                  productsByCategory[categoryName]!.add(item);
+                }
+
+                return RefreshIndicator(
+
+                  onRefresh:_refreshHome,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Column(
                       children: [
-                        CarouselSlider(
-                          items:
-                              images.map((image) {
-                                return ImageWidget(
-                                  imageUrl: image,
-                                  width: 1.sw,
-                                  fit: BoxFit.cover,
-                                  height: 200,
-                                );
-                              }).toList(),
-                          options: CarouselOptions(
-                            height: 200,
-                            autoPlay: true,
-                            enlargeCenterPage: true,
-                            aspectRatio: 16 / 9,
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            enableInfiniteScroll: true,
-                            autoPlayAnimationDuration: Duration(
-                              milliseconds: 800,
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          color: Color(0xffE67002),
+                          child: Center(
+                            child: TextView(
+                              text: "Call To Order: 09160002490",
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
                             ),
-                            viewportFraction: 1.0,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _currentIndex = index;
-                              });
-                            },
                           ),
                         ),
-                        Column(
+                        10.verticalSpace,
+                        Stack(
                           children: [
-                            10.verticalSpace,
-                            TextView(
-                              text: "Get Quality products at affordable prices",
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              align: TextAlign.center,
-                            ),
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              onTap: () {
-                                context.pushNamed(PageUrl.shopsscreen);
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 50,
-                                width: 200,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xffE67002)
+                            CarouselSlider(
+                              items:
+                                  images.map((image) {
+                                    return ImageWidget(
+                                      imageUrl: image,
+                                      width: 1.sw,
+                                      fit: BoxFit.cover,
+                                      height: 200,
+                                    );
+                                  }).toList(),
+                              options: CarouselOptions(
+                                height: 200,
+                                autoPlay: true,
+                                enlargeCenterPage: true,
+                                aspectRatio: 16 / 9,
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                enableInfiniteScroll: true,
+                                autoPlayAnimationDuration: Duration(
+                                  milliseconds: 800,
                                 ),
-                                child: TextView(
-                                  text: "Shop Now",
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
+                                viewportFraction: 1.0,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _currentIndex = index;
+                                  });
+                                },
                               ),
                             ),
-                            // SizedBox(
-                            //   width: 200,
-                            //   height: 60,
-                            //   child: CustomButton(
-                            //     isExpanded: true,
-                            //     // padding: EdgeInsets.symmetric(horizontal: 20),
-                            //     onPressed: () {
-                            //       context.pushNamed(PageUrl.shopsscreen);
-                            //     },
-                            //     // bgColor: Color(0xffE67002),
-                            //     child: TextView(
-                            //       text: "Shop Now",
-                            //       fontWeight: FontWeight.w600,
-                            //       color: Colors.white,
-                            //     ),
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:
-                                images.asMap().entries.map((entry) {
-                                  return Container(
-                                    width: 8.0,
-                                    height: 8.0,
-                                    margin: EdgeInsets.symmetric(
-                                      horizontal: 4.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color:
-                                          _currentIndex == entry.key
-                                              ? Colors.white
-                                              : Colors.white.withOpacity(0.4),
-                                    ),
-                                  );
-                                }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    20.verticalSpace,
-
-                    Column(
-                      children:
-                          productsByCategory.entries.map((entry) {
-                            final categoryName = entry.key;
-                            final categoryProducts = entry.value;
-                            final categoryId =
-                                categoryProducts.first.category?.id
-                                    .toString() ??
-                                '';
-                            return Column(
+                            Column(
                               children: [
                                 10.verticalSpace,
-                                Container(
-                                  height: 60,
-                                  width: 1.sw,
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 15,
-                                  ),
-                                  color: Color(0xffE67002).withOpacity(0.8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextView(
-                                        text: categoryName,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      TextView(
-                                        onTap: () {
-                                          context.pushNamed(
-                                            PageUrl.see_all,
-                                            queryParameters: {
-                                              PathParam.id: categoryId,
-                                              PathParam.userName: categoryName,
-                                            },
-                                          );
-                                        },
-                                        text: 'See All',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12,
-                                      ),
-                                    ],
+                                TextView(
+                                  text: "Get Quality products at affordable prices",
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  align: TextAlign.center,
+                                ),
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  onTap: () {
+                                    context.pushNamed(PageUrl.shopsscreen);
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 50,
+                                    width: 200,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xffE67002)
+                                    ),
+                                    child: TextView(
+                                      text: "Shop Now",
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                                10.verticalSpace,
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  child: GridView(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 10,
-                                          crossAxisSpacing: 10,
-                                          childAspectRatio: .7,
-                                        ),
-                                    padding: EdgeInsets.only(bottom: 10),
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    children: List.generate(categoryProducts.take(10).length, (
-                                      index,
-                                    ) {
-                                      final prod = categoryProducts[index];
-                                      int calculateDiscountPercentage(
-                                        String price,
-                                        String discountPrice,
-                                      ) {
-                                        final double originalPrice =
-                                            double.tryParse(price) ?? 0;
-                                        final double discountedPrice =
-                                            double.tryParse(discountPrice) ?? 0;
-                                        if (discountedPrice <= 0 ||
-                                            discountedPrice >= originalPrice)
-                                          return 0;
-                                        return ((1 -
-                                                    discountedPrice /
-                                                        originalPrice) *
-                                                100)
-                                            .round();
-                                      }
-
-                                      final productId = prod.id.toString();
-                                      final isLiked = likedProductIds.contains(
-                                        productId,
-                                      );
-
+                                // SizedBox(
+                                //   width: 200,
+                                //   height: 60,
+                                //   child: CustomButton(
+                                //     isExpanded: true,
+                                //     // padding: EdgeInsets.symmetric(horizontal: 20),
+                                //     onPressed: () {
+                                //       context.pushNamed(PageUrl.shopsscreen);
+                                //     },
+                                //     // bgColor: Color(0xffE67002),
+                                //     child: TextView(
+                                //       text: "Shop Now",
+                                //       fontWeight: FontWeight.w600,
+                                //       color: Colors.white,
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              left: 0,
+                              right: 0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children:
+                                    images.asMap().entries.map((entry) {
                                       return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                          border: Border.all(
-                                            color: Pallets.grey95,
-                                          ),
+                                        width: 8.0,
+                                        height: 8.0,
+                                        margin: EdgeInsets.symmetric(
+                                          horizontal: 4.0,
                                         ),
-                                        child: Stack(
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                              _currentIndex == entry.key
+                                                  ? Colors.white
+                                                  : Colors.white.withOpacity(0.4),
+                                        ),
+                                      );
+                                    }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        20.verticalSpace,
+
+                        Column(
+                          children:
+                              productsByCategory.entries.map((entry) {
+                                final categoryName = entry.key;
+                                final categoryProducts = entry.value;
+                                final categoryId =
+                                    categoryProducts.first.category?.id
+                                        .toString() ??
+                                    '';
+                                return Column(
+                                  children: [
+                                    10.verticalSpace,
+                                    Container(
+                                      height: 60,
+                                      width: 1.sw,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 15,
+                                      ),
+                                      color: Color(0xffE67002).withOpacity(0.8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextView(
+                                            text: categoryName,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          TextView(
+                                            onTap: () {
+                                              context.pushNamed(
+                                                PageUrl.see_all,
+                                                queryParameters: {
+                                                  PathParam.id: categoryId,
+                                                  PathParam.userName: categoryName,
+                                                },
+                                              );
+                                            },
+                                            text: 'See All',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    10.verticalSpace,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: GridView(
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              mainAxisSpacing: 10,
+                                              crossAxisSpacing: 10,
+                                              childAspectRatio: .7,
+                                            ),
+                                        padding: EdgeInsets.only(bottom: 10),
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        children: List.generate(categoryProducts.take(10).length, (
+                                          index,
+                                        ) {
+                                          final prod = categoryProducts[index];
+                                          int calculateDiscountPercentage(
+                                            String price,
+                                            String discountPrice,
+                                          ) {
+                                            final double originalPrice =
+                                                double.tryParse(price) ?? 0;
+                                            final double discountedPrice =
+                                                double.tryParse(discountPrice) ?? 0;
+                                            if (discountedPrice <= 0 ||
+                                                discountedPrice >= originalPrice)
+                                              return 0;
+                                            return ((1 -
+                                                        discountedPrice /
+                                                            originalPrice) *
+                                                    100)
+                                                .round();
+                                          }
+
+                                          final productId = prod.id.toString();
+                                          final isLiked = likedProductIds.contains(
+                                            productId,
+                                          );
+
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(
+                                                10,
+                                              ),
+                                              border: Border.all(
+                                                color: Pallets.grey95,
+                                              ),
+                                            ),
+                                            child: Stack(
+                                              clipBehavior: Clip.none,
                                               children: [
-                                                Expanded(
-                                                  child: InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    onTap: () {
-                                                      context.pushNamed(
-                                                        PageUrl.product_details,
-                                                        queryParameters: {
-                                                          PathParam.id:
-                                                              prod.id
-                                                                  .toString(),
-                                                        },
-                                                      );
-                                                    },
-                                                    child: Center(
-                                                      child: IgnorePointer(
-                                                        child: ImageWidget(
-                                                          imageUrl:
-                                                              prod.coverImage
-                                                                  .toString(),
-                                                          size: 150,
-                                                          fit: BoxFit.scaleDown,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                4.verticalSpace,
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                        horizontal: 5,
-                                                      ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      InkWell(
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Expanded(
+                                                      child: InkWell(
                                                         splashColor:
                                                             Colors.transparent,
                                                         onTap: () {
                                                           context.pushNamed(
-                                                            PageUrl
-                                                                .product_details,
+                                                            PageUrl.product_details,
                                                             queryParameters: {
                                                               PathParam.id:
                                                                   prod.id
@@ -405,271 +389,311 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             },
                                                           );
                                                         },
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            TextView(
-                                                              text:
-                                                                  prod.name ??
-                                                                  '',
-                                                              maxLines: 2,
-                                                              fontSize: 13,
+                                                        child: Center(
+                                                          child: IgnorePointer(
+                                                            child: ImageWidget(
+                                                              imageUrl:
+                                                                  prod.coverImage
+                                                                      .toString(),
+                                                              size: 150,
+                                                              fit: BoxFit.scaleDown,
                                                             ),
-                                                            6.verticalSpace,
-                                                            StockIndicator(
-                                                              stockQuantity:
-                                                                  prod.stockQuantity,
-                                                            ),
-                                                            6.verticalSpace,
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    4.verticalSpace,
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 5,
+                                                          ),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          InkWell(
+                                                            splashColor:
+                                                                Colors.transparent,
+                                                            onTap: () {
+                                                              context.pushNamed(
+                                                                PageUrl
+                                                                    .product_details,
+                                                                queryParameters: {
+                                                                  PathParam.id:
+                                                                      prod.id
+                                                                          .toString(),
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
-                                                                RatingBar.builder(
-                                                                  ignoreGestures:
-                                                                      true,
-                                                                  initialRating:
-                                                                      double.tryParse(
-                                                                        prod.ratingsAverage
-                                                                            .toString(),
-                                                                      ) ??
-                                                                      0,
-                                                                  direction:
-                                                                      Axis.horizontal,
-                                                                  itemSize: 16,
-                                                                  allowHalfRating:
-                                                                      false,
-                                                                  itemCount: 5,
-                                                                  unratedColor:
-                                                                      Pallets
-                                                                          .grey90,
-                                                                  itemPadding:
-                                                                      EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            0.0,
-                                                                      ),
-                                                                  itemBuilder:
-                                                                      (
-                                                                        context,
-                                                                        _,
-                                                                      ) => const Icon(
-                                                                        Icons
-                                                                            .star_border_outlined,
-                                                                        color:
-                                                                            Colors.amber,
-                                                                        size:
-                                                                            14,
-                                                                      ),
-                                                                  onRatingUpdate:
-                                                                      (
-                                                                        double
-                                                                        value,
-                                                                      ) {},
+                                                                TextView(
+                                                                  text:
+                                                                      prod.name ??
+                                                                      '',
+                                                                  maxLines: 2,
+                                                                  fontSize: 13,
                                                                 ),
-                                                                5.horizontalSpace,
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
+                                                                6.verticalSpace,
+                                                                StockIndicator(
+                                                                  stockQuantity:
+                                                                      prod.stockQuantity,
+                                                                ),
+                                                                6.verticalSpace,
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
                                                                   children: [
-                                                                    Text(
-                                                                      "₦${formatNumberWithCommas(prod.discountPrice.toString())}",
-                                                                      style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                      ),
+                                                                    RatingBar.builder(
+                                                                      ignoreGestures:
+                                                                          true,
+                                                                      initialRating:
+                                                                          double.tryParse(
+                                                                            prod.ratingsAverage
+                                                                                .toString(),
+                                                                          ) ??
+                                                                          0,
+                                                                      direction:
+                                                                          Axis.horizontal,
+                                                                      itemSize: 16,
+                                                                      allowHalfRating:
+                                                                          false,
+                                                                      itemCount: 5,
+                                                                      unratedColor:
+                                                                          Pallets
+                                                                              .grey90,
+                                                                      itemPadding:
+                                                                          EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                0.0,
+                                                                          ),
+                                                                      itemBuilder:
+                                                                          (
+                                                                            context,
+                                                                            _,
+                                                                          ) => const Icon(
+                                                                            Icons
+                                                                                .star_border_outlined,
+                                                                            color:
+                                                                                Colors.amber,
+                                                                            size:
+                                                                                14,
+                                                                          ),
+                                                                      onRatingUpdate:
+                                                                          (
+                                                                            double
+                                                                            value,
+                                                                          ) {},
                                                                     ),
-                                                                    Text(
-                                                                      "₦${formatNumberWithCommas(prod.price.toString())}",
-                                                                      style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                        decoration:
-                                                                            TextDecoration.lineThrough,
-                                                                        fontSize:
-                                                                            10,
-                                                                      ),
+                                                                    5.horizontalSpace,
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Text(
+                                                                          "₦${formatNumberWithCommas(prod.discountPrice.toString())}",
+                                                                          style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w700,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          "₦${formatNumberWithCommas(prod.price.toString())}",
+                                                                          style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w700,
+                                                                            decoration:
+                                                                                TextDecoration.lineThrough,
+                                                                            fontSize:
+                                                                                10,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    BlocConsumer<CartBloc, CartState>(
+                                                                      bloc: cart,
+                                                                      listener:(BuildContext context, CartState state) {
+                                                                        if (state is AddCartloadingState) {
+                                                                          CustomDialogs.showLoading(context,barrierColor: Colors.transparent);
+                                                                        }
+                                                                        if (state is CartfailiureState) {
+                                                                          context.pop();
+                                                                          CustomDialogs.error(state.error);
+                                                                        }
+                                                                        if (state is AddCartSuccessState) {
+                                                                          context.pop();
+                                                                          CustomDialogs.success("Item added to cart");
+                                                                        }
+                                                                      },
+
+                                                                      builder: (context, state,) {
+                                                                        return InkWell(
+                                                                          splashColor: Colors.transparent,
+                                                                          onTap: () {
+                                                                            addToCart(
+                                                                              productId,
+                                                                            );
+                                                                          },
+                                                                          child: CircleAvatar(
+                                                                            backgroundColor:
+                                                                                Color(
+                                                                                  0xffE67002,
+                                                                                ),
+                                                                            radius:
+                                                                                14,
+                                                                            child: Icon(
+                                                                              Icons
+                                                                                  .add_shopping_cart,
+                                                                              size:
+                                                                                  16,
+                                                                              color:
+                                                                                  Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
                                                                     ),
                                                                   ],
                                                                 ),
-                                                                BlocConsumer<CartBloc, CartState>(
-                                                                  bloc: cart,
-                                                                  listener:(BuildContext context, CartState state) {
-                                                                    if (state is AddCartloadingState) {
-                                                                      CustomDialogs.showLoading(context,barrierColor: Colors.transparent);
-                                                                    }
-                                                                    if (state is CartfailiureState) {
-                                                                      context.pop();
-                                                                      CustomDialogs.error(state.error);
-                                                                    }
-                                                                    if (state is AddCartSuccessState) {
-                                                                      context.pop();
-                                                                      CustomDialogs.success("Item added to cart");
-                                                                    }
-                                                                  },
-
-                                                                  builder: (context, state,) {
-                                                                    return InkWell(
-                                                                      splashColor: Colors.transparent,
-                                                                      onTap: () {
-                                                                        addToCart(
-                                                                          productId,
-                                                                        );
-                                                                      },
-                                                                      child: CircleAvatar(
-                                                                        backgroundColor:
-                                                                            Color(
-                                                                              0xffE67002,
-                                                                            ),
-                                                                        radius:
-                                                                            14,
-                                                                        child: Icon(
-                                                                          Icons
-                                                                              .add_shopping_cart,
-                                                                          size:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                ),
                                                               ],
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+
+                                                          6.verticalSpace,
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                    left: 5,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      BlocConsumer<FavouriteBloc, FavouriteState>(
+                                                        bloc: likeproduct,
+                                                        listener: (context, state) {
+                                                          if (state is FavouriteloadingState) {
+                                                            CustomDialogs.showLoading(context, barrierColor: Colors.transparent);
+                                                          }
+                                                          if (state is FavouritefailiureState) {
+                                                            context.pop();
+                                                          }
+                                                          if (state is FavouritelikeSuccessState) {
+                                                            context.pop();
+                                                            likedProductIds.add(state.productId);
+                                                            setState(() {});
+                                                            CustomDialogs.showToast("Added to favourite");
+                                                          }
+                                                          if (state is FavouriteUnlikeSuccessState) {
+                                                            context.pop();
+                                                            likedProductIds.remove(state.productId);
+                                                            setState(() {});
+                                                            CustomDialogs.showToast("Removed from favourite");
+                                                          }
+                                                        },
+                                                        builder: (context, state) {
+                                                          final currentProductId = prod.id.toString(); // ✅ Get from loop item
+
+                                                          return CircleAvatar(
+                                                            radius: 15,
+                                                            backgroundColor: Pallets.white,
+                                                            child: GestureDetector(
+                                                              onTap: () {
+                                                                if (likedProductIds.contains(currentProductId)) {
+                                                                  likeproduct.add(UnlikeItemEvent(currentProductId)); // ✅ send correct id
+                                                                } else {
+                                                                  likeproduct.add(LikeItemEvent(currentProductId));
+                                                                }
+                                                              },
+                                                              child: Icon(
+                                                                likedProductIds.contains(currentProductId)
+                                                                    ? Icons.favorite
+                                                                    : Icons.favorite_border,
+                                                                color: likedProductIds.contains(currentProductId)
+                                                                    ? Colors.red
+                                                                    : Colors.black,
+                                                                size: 18,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
 
-                                                      6.verticalSpace,
+
+
+                                                      Container(
+                                                        height: 30,
+                                                        width: 55,
+                                                        padding: EdgeInsets.all(5),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                topRight:
+                                                                    Radius.circular(
+                                                                      10,
+                                                                    ),
+                                                                bottomLeft:
+                                                                    Radius.circular(
+                                                                      10,
+                                                                    ),
+                                                              ),
+                                                          color: Color(0xff3567a6),
+                                                        ),
+                                                        child: Center(
+                                                          child: TextView(
+                                                            text:
+                                                                "${calculateDiscountPercentage(prod.price.toString(), prod.discountPrice.toString())}% OFF",
+                                                            color: Colors.white,
+                                                            fontSize: 10,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 5,
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  BlocConsumer<FavouriteBloc, FavouriteState>(
-                                                    bloc: likeproduct,
-                                                    listener: (context, state) {
-                                                      if (state is FavouriteloadingState) {
-                                                        CustomDialogs.showLoading(context, barrierColor: Colors.transparent);
-                                                      }
-                                                      if (state is FavouritefailiureState) {
-                                                        context.pop();
-                                                      }
-                                                      if (state is FavouritelikeSuccessState) {
-                                                        context.pop();
-                                                        likedProductIds.add(state.productId);
-                                                        setState(() {});
-                                                        CustomDialogs.showToast("Added to favourite");
-                                                      }
-                                                      if (state is FavouriteUnlikeSuccessState) {
-                                                        context.pop();
-                                                        likedProductIds.remove(state.productId);
-                                                        setState(() {});
-                                                        CustomDialogs.showToast("Removed from favourite");
-                                                      }
-                                                    },
-                                                    builder: (context, state) {
-                                                      final currentProductId = prod.id.toString(); // ✅ Get from loop item
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                    10.verticalSpace,
+                                  ],
+                                );
+                              }).toList(),
+                        ),
 
-                                                      return CircleAvatar(
-                                                        radius: 15,
-                                                        backgroundColor: Pallets.white,
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            if (likedProductIds.contains(currentProductId)) {
-                                                              likeproduct.add(UnlikeItemEvent(currentProductId)); // ✅ send correct id
-                                                            } else {
-                                                              likeproduct.add(LikeItemEvent(currentProductId));
-                                                            }
-                                                          },
-                                                          child: Icon(
-                                                            likedProductIds.contains(currentProductId)
-                                                                ? Icons.favorite
-                                                                : Icons.favorite_border,
-                                                            color: likedProductIds.contains(currentProductId)
-                                                                ? Colors.red
-                                                                : Colors.black,
-                                                            size: 18,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-
-
-
-                                                  Container(
-                                                    height: 30,
-                                                    width: 55,
-                                                    padding: EdgeInsets.all(5),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                            topRight:
-                                                                Radius.circular(
-                                                                  10,
-                                                                ),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                  10,
-                                                                ),
-                                                          ),
-                                                      color: Color(0xff3567a6),
-                                                    ),
-                                                    child: Center(
-                                                      child: TextView(
-                                                        text:
-                                                            "${calculateDiscountPercentage(prod.price.toString(), prod.discountPrice.toString())}% OFF",
-                                                        color: Colors.white,
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ),
-                                10.verticalSpace,
-                              ],
-                            );
-                          }).toList(),
+                        // 10.verticalSpace,
+                        70.verticalSpace,
+                      ],
                     ),
-
-                    // 10.verticalSpace,
-                    70.verticalSpace,
-                  ],
-                ),
-              );
-            }
-            return SizedBox();
-          },
+                  ),
+                );
+              }
+              return SizedBox();
+            },
+          ),
         ),
       ),
     );

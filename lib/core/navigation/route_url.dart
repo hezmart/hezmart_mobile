@@ -20,6 +20,7 @@ class PageUrl {
   static const shopsscreen = 'shopsscreen';
   static const shop_vendor_products = 'shop_vendor_products';
   static const search_screen = 'search_screen';
+  static const help = 'help_tab';
 
   ///cart
   static const mycart = 'my_cart';

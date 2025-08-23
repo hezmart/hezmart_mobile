@@ -492,15 +492,19 @@ class _ProceedCheckoutState extends State<ProceedCheckout> {
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
                         ),
-                        TextView(
-                          text: "Change",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color: Colors.green,
-                          onTap: () {
-                            context.pushNamed(PageUrl.my_profile);
-                          },
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: TextView(
+                            text: "View/Edit",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            color: Colors.green,
+                            onTap: () {
+                              context.pushNamed(PageUrl.my_profile);
+                            },
+                          ),
                         ),
+
                       ],
                     ),
                   ),

@@ -22,6 +22,7 @@ import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 
 import '../../../../common/widgets/image_widget.dart';
+import '../../../../core/di/injector.dart';
 import '../../../../core/navigation/path_params.dart';
 import '../../../../core/navigation/route_url.dart';
 import '../../../../core/theme/pallets.dart';
@@ -49,11 +50,14 @@ class _ProductDetailsState extends State<ProductDetails> {
     final DateTime parsedDate = DateTime.parse(dateString);
     return DateFormat('MM/dd/yyyy').format(parsedDate);
   }
+  final mycart = injector.get<CartBloc>();
 
   @override
   void initState() {
     // TODO: implement initState
     single.add(SingleProductsEvent(widget.id.toString()));
+    mycart.add(GetCartEvent());
+
     super.initState();
   }
   String formatNumberWithCommas(String number) {
@@ -75,6 +79,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   void dispose() {
     _pageController.dispose();
+
     super.dispose();
   }
 
@@ -83,7 +88,56 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.95),
-      appBar: CustomAppBar(tittle: TextView(text: "Product Details")),
+      appBar: CustomAppBar(tittle: TextView(text: "Product Details"),actions: [
+        InkWell(
+          onTap: (){
+            context.goNamed(PageUrl.mycart);
+          },
+          child: BlocConsumer<CartBloc, CartState>(
+            bloc: mycart,
+            listener: (context, state) {
+              // TODO: implement listener
+            },
+            builder: (context, state) {
+              if (state is GetCartSuccessState) {
+                final cartitems = state.response.data?.items;
+                if(cartitems!.isEmpty){
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Icon(Icons.shopping_cart_outlined),
+
+                    ],
+                  );
+                }
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(Icons.shopping_cart_outlined),
+                    Positioned(
+                      right: -3,
+                      top: -5,
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xffE67002),
+                        radius: 8,
+                        child: TextView(
+                          text: cartitems!.length.toString(),
+                          color: Pallets.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return Icon(Icons.shopping_cart_outlined);
+            },
+          ),
+        ),
+        15.horizontalSpace,
+      ],),
 
       body: BlocConsumer<ProductsBloc, ProductsState>(
         bloc: single,

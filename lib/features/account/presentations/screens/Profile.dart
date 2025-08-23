@@ -49,60 +49,117 @@ class _ProfileState extends State<Profile> {
       //     },
       //       child: Icon(Iconsax.notification,)),20.horizontalSpace],
       // ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size(1.sw, 140),
+      //   child: Container(
+      //     padding: EdgeInsets.only(left: 25, top: 20),
+      //     // color: Color(0xffE67002),
+      //     color:
+      //     Colors.black,
+      //     child: Column(
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [
+      //         20.verticalSpace,
+      //         Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           children: [
+      //             TextView(
+      //               text: "Account",
+      //               fontSize: 20,
+      //               color: Colors.white,
+      //               fontWeight: FontWeight.w600,
+      //             ),
+      //             Padding(
+      //               padding: const EdgeInsets.only(right: 20),
+      //               child: InkWell(
+      //                 splashColor: Colors.transparent,
+      //                 onTap: () {
+      //                   context.pushNamed(PageUrl.search_screen);
+      //                 },
+      //
+      //                 child: Icon(
+      //                   Iconsax.search_normal,
+      //                   // color: Color(0xffE67002),
+      //
+      //                   color: Colors.white,
+      //                   size: 18,
+      //                 ),
+      //               ),
+      //             ),
+      //
+      //
+      //           ],
+      //         ),
+      //
+      //         30.verticalSpace,
+      //         TextView(
+      //           text: "Welcome ${user.appUser?.firstName ?? ''}!",
+      //           color: Color(0xffE67002),
+      //           fontSize: 18,
+      //           fontWeight: FontWeight.w600,
+      //
+      //         ),
+      //         TextView(
+      //           text: user.appUser?.email ?? '',
+      //           color: Colors.white,
+      //           fontSize: 12,
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       appBar: PreferredSize(
-        preferredSize: Size(1.sw, 100),
+        preferredSize: Size(1.sw, 120),
         child: Container(
-          padding: EdgeInsets.only(left: 25, top: 25),
-          // color: Color(0xffE67002),
-          color:
-          Colors.black,
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10), // Reduced padding
+          color: Colors.black,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround, // Better spacing
             children: [
-              20.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextView(
-                    text: "Account",
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      onTap: () {
-                        context.pushNamed(PageUrl.search_screen);
-                      },
-
-                      child: Icon(
-                        Iconsax.search_normal,
-                        // color: Color(0xffE67002),
-
-                        color: Colors.white,
-                        size: 18,
-                      ),
+                  Flexible(
+                    child: TextView(
+                      text: "Account",
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      // overflow: TextOverflow.ellipsis, // Handle long text
                     ),
                   ),
-
-
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      context.pushNamed(PageUrl.search_screen);
+                    },
+                    child: Icon(
+                      Iconsax.search_normal,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
                 ],
               ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: "Welcome ${user.appUser?.firstName ?? ''}!",
+                    color: Color(0xffE67002),
+                    fontSize: 16, // Slightly smaller font
+                    fontWeight: FontWeight.w600,
+                    // overflow: TextOverflow.ellipsis,
+                  ),
 
-              25.verticalSpace,
-              TextView(
-                text: "Welcome ${user.appUser?.firstName ?? ''}!",
-                color: Color(0xffE67002),
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-
-              ),
-              TextView(
-                text: user.appUser?.email ?? '',
-                color: Colors.white,
-                fontSize: 12,
+                  TextView(
+                    text: user.appUser?.email ?? '',
+                    color: Colors.white,
+                    fontSize: 11, // Slightly smaller font
+                    // overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
             ],
           ),
@@ -211,7 +268,15 @@ class _ProfileState extends State<Profile> {
                     fontWeight: FontWeight.w500,
                   ),
                   Divider(),
+
                   20.verticalSpace,
+                  ProfileItem(
+                    widget: Icon(Icons.support_agent_rounded, size: 17),
+                    text: 'Contact Us',
+                    ontap: () {
+                      context.pushNamed(PageUrl.help);
+                    },
+                  ),
                   // ProfileItem(
                   //   widget: Icon(Icons.support_agent_rounded, size: 17),
                   //   text: 'Contact Support',

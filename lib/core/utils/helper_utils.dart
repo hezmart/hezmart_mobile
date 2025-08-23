@@ -5,6 +5,8 @@ import 'package:dart_ipify/dart_ipify.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hezmart/core/utils/string_extension.dart';
+import 'package:hezmart/core/utils/url_launcher.dart';
 
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart' as launch;

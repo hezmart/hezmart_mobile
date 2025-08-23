@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hezmart/core/navigation/path_params.dart';
 import 'package:hezmart/core/navigation/route_url.dart';
 import 'package:hezmart/features/account/presentations/screens/edit_profile.dart';
+import 'package:hezmart/features/account/presentations/screens/help_tab.dart';
 import 'package:hezmart/features/account/presentations/screens/my_profile.dart';
 import 'package:hezmart/features/authentication/presentations/screens/complete_account.dart';
 import 'package:hezmart/features/authentication/presentations/screens/create_new_password.dart';
-import 'package:hezmart/features/authentication/presentations/screens/forgot_password.dart';
 import 'package:hezmart/features/authentication/presentations/screens/otp_screen.dart';
 import 'package:hezmart/features/authentication/presentations/screens/signin_screen.dart';
 import 'package:hezmart/features/authentication/presentations/screens/signup_screen.dart';
@@ -32,6 +32,7 @@ import 'package:hezmart/features/search/presentations/screens/search_screen.dart
 import 'package:hezmart/features/wishlist/presentations/fav_bloc/favourite_bloc.dart';
 import '../../features/account/presentations/screens/Profile.dart';
 import '../../features/account/presentations/screens/customer_ssupport.dart';
+import '../../features/authentication/presentations/screens/forgot_password.dart';
 import '../../features/authentication/presentations/screens/signup_otp.dart';
 import '../../features/cart/presentations/screens/my_cart.dart';
 import '../../features/categories/presentations/screens/categories.dart';
@@ -218,6 +219,10 @@ class CustomRoutes {
         path: '/search_screen',
         name: PageUrl.search_screen,
         builder: (context, state) => const SearchScreen(),
+      ),  GoRoute(
+        path: '/help',
+        name: PageUrl.help,
+        builder: (context, state) => const HelpTab(),
       ),
       GoRoute(
         path: '/order_details',

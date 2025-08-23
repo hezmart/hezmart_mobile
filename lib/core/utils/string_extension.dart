@@ -1,3 +1,5 @@
+import 'package:hezmart/core/utils/utility_functions.dart';
+
 import '_utils.dart';
 
 extension StringExtension on String {

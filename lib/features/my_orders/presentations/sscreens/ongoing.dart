@@ -23,10 +23,10 @@ class Ongoing extends StatefulWidget {
 
 class _OngoingState extends State<Ongoing> {
   final orderbloc = OrderBloc(OrderRepositoryImpl(NetworkService()));
+
   @override
   void initState() {
     orderbloc.add(GetAllOrdersEvent());
-    // TODO: implement initState
     super.initState();
   }
 
@@ -51,29 +51,38 @@ class _OngoingState extends State<Ongoing> {
               );
             }
             if (state is GetAllOrderSuccesState) {
+              final validStatuses = ['delivered', 'processing', 'pending', 'completed', "partially_received"];
 
-              final validStatuses = ['delivered', 'processing', 'pending', 'completed',"partially_received"];
 
               final pendingDelivered = state.reponse.data?.orders
                   ?.where((order) =>
-                  validStatuses.contains(order.status?.toLowerCase() ?? ''))
-                  .toList()?..sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+              validStatuses.contains(order.status?.toLowerCase() ?? '') &&
+                  order.items != null &&
+                  order.items!.isNotEmpty)
+                  .toList()
+                ?..sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
 
               if (pendingDelivered == null || pendingDelivered.isEmpty) {
                 return SizedBox(
                   width: 1.sw,
-                    height: 1.sh,
-                    child: Center(child: TextView(text: "You have no orders.")));
+                  height: 1.sh,
+                  child: Center(child: TextView(text: "You have no orders.")),
+                );
               }
+
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: List.generate(
-                    pendingDelivered!.length,
+                    pendingDelivered.length,
                         (onggoingContext) => InkWell(
                       onTap: () {
-                        context.pushNamed(PageUrl.order_details,
-                            queryParameters: {PathParam.id:pendingDelivered[onggoingContext].items?.first.orderId.toString()??'' });
+                        context.pushNamed(
+                          PageUrl.order_details,
+                          queryParameters: {
+                            PathParam.id: pendingDelivered[onggoingContext].items?.first.orderId.toString() ?? ''
+                          },
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.all(10),
@@ -84,7 +93,7 @@ class _OngoingState extends State<Ongoing> {
                               height: 110,
                               width: 90,
                               child: ImageWidget(
-                                imageUrl: pendingDelivered[onggoingContext].items?.first.product?.coverImage??'',
+                                imageUrl: pendingDelivered[onggoingContext].items?.first.product?.coverImage ?? '',
                                 fit: BoxFit.cover,
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -96,29 +105,40 @@ class _OngoingState extends State<Ongoing> {
                                 children: [
                                   Row(
                                     children: [
-                                      TextView(text: "Total Item(s)",fontSize: 14,fontWeight: FontWeight.w600,),5.horizontalSpace,
-                                      TextView(text:"${pendingDelivered[onggoingContext].items.length.toString()}"),
+                                      TextView(
+                                        text: "Total Item(s)",
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      5.horizontalSpace,
+                                      TextView(
+                                        text: "${pendingDelivered[onggoingContext].items.length.toString()}",
+                                      ),
                                     ],
                                   ),
                                   5.verticalSpace,
-                                  TextView(text: "Order: ${pendingDelivered[onggoingContext].orderNumber??''}"),
+                                  TextView(
+                                    text: "Order: ${pendingDelivered[onggoingContext].orderNumber ?? ''}",
+                                  ),
                                   10.verticalSpace,
-                                  // TextView(text: "Variation: ${pendingDelivered[onggoingContext].orderNumber??""}"),
                                   Container(
                                     padding: EdgeInsets.all(3),
                                     decoration: BoxDecoration(
-                                      color:pendingDelivered[onggoingContext].status=="delivered"||pendingDelivered[onggoingContext].status=="completed"||pendingDelivered[onggoingContext].status=="partially_received"? Pallets.successGreen:Pallets.grey35,
+                                      color: pendingDelivered[onggoingContext].status == "delivered" ||
+                                          pendingDelivered[onggoingContext].status == "completed" ||
+                                          pendingDelivered[onggoingContext].status == "partially_received"
+                                          ? Pallets.successGreen
+                                          : Pallets.grey35,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     child: TextView(
-                                      text: pendingDelivered[onggoingContext].status?.toUpperCase()??'',
+                                      text: pendingDelivered[onggoingContext].status?.toUpperCase() ?? '',
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 10,
                                     ),
                                   ),
                                   2.verticalSpace,
-                                  // TextView(text: "Delivered From 23 Jun and 25 June"),
                                 ],
                               ),
                             ),

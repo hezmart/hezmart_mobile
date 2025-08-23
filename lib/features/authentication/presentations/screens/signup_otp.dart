@@ -48,7 +48,7 @@ class _SignupOtpState extends State<SignupOtp> {
               12.verticalSpace,
               const TextView(
                 text:
-                "Enter the 5 digit verification code sent to the email address to proceed",
+                "Enter the 4 digit verification code sent to the email address to proceed",
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 align: TextAlign.center,

@@ -1,4 +1,5 @@
 import 'package:hezmart/core/_core.dart';
+import 'package:hezmart/core/utils/string_extension.dart';
 
 class FieldValidators {
   static String? createPasscodeValidator(String? value) {
