@@ -27,6 +27,7 @@ import '../../../../common/widgets/custom_dialogs.dart';
 import '../../../../common/widgets/shimmer_box_widget.dart';
 import '../../../../core/navigation/path_params.dart';
 import '../../../../core/theme/pallets.dart';
+import '../../../authentication/presentations/user_bloc/user_bloc.dart';
 import '../../../cart/data/data/cart_repo_impl.dart';
 import '../../../cart/data/models/cart_payload.dart';
 import '../../../cart/presentations/cartbloc/cart_bloc.dart';
@@ -543,10 +544,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       builder: (context, state,) {
                                                                         return InkWell(
                                                                           splashColor: Colors.transparent,
-                                                                          onTap: () {
+                                                                          onTap: injector.get<UserBloc>().appUser != null?() {
                                                                             addToCart(
                                                                               productId,
                                                                             );
+                                                                          }:(){
+                                                                            CustomDialogs.showToast("Login to add to cart");
                                                                           },
                                                                           child: CircleAvatar(
                                                                             backgroundColor:
@@ -617,12 +620,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             radius: 15,
                                                             backgroundColor: Pallets.white,
                                                             child: GestureDetector(
-                                                              onTap: () {
+                                                              onTap: injector.get<UserBloc>().appUser != null?() {
                                                                 if (likedProductIds.contains(currentProductId)) {
                                                                   likeproduct.add(UnlikeItemEvent(currentProductId)); // ✅ send correct id
                                                                 } else {
                                                                   likeproduct.add(LikeItemEvent(currentProductId));
                                                                 }
+                                                              }:(){
+                                                                CustomDialogs.showToast("Login to add favorite");
                                                               },
                                                               child: Icon(
                                                                 likedProductIds.contains(currentProductId)

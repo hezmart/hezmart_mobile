@@ -15,6 +15,7 @@ import '../../../../core/navigation/path_params.dart';
 import '../../../../core/navigation/route_url.dart';
 import '../../../../core/services/network/network_service.dart';
 import '../../../../core/theme/pallets.dart';
+import '../../../authentication/presentations/user_bloc/user_bloc.dart';
 import '../../../cart/data/data/cart_repo_impl.dart';
 import '../../../cart/data/models/cart_payload.dart';
 import '../../../cart/presentations/cartbloc/cart_bloc.dart';
@@ -162,7 +163,7 @@ class _AllProductsState extends State<AllProducts> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
                     ),
-                    child: GridView(
+                    child:  GridView(
                       gridDelegate:
                       SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -384,10 +385,12 @@ class _AllProductsState extends State<AllProducts> {
                                                     builder: (context, state,) {
                                                       return InkWell(
                                                         splashColor: Colors.transparent,
-                                                        onTap: () {
+                                                        onTap: injector.get<UserBloc>().appUser != null?() {
                                                           addToCart(
                                                             productId,
                                                           );
+                                                        }:(){
+                                                          CustomDialogs.showToast("Login to add to cart");
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
@@ -458,12 +461,14 @@ class _AllProductsState extends State<AllProducts> {
                                           radius: 15,
                                           backgroundColor: Pallets.white,
                                           child: GestureDetector(
-                                            onTap: () {
+                                            onTap: injector.get<UserBloc>().appUser != null?() {
                                               if (likedProductIds.contains(currentProductId)) {
                                                 likeproduct.add(UnlikeItemEvent(currentProductId)); // ✅ send correct id
                                               } else {
                                                 likeproduct.add(LikeItemEvent(currentProductId));
                                               }
+                                            }:(){
+                                              CustomDialogs.showToast("Login to add favorite");
                                             },
                                             child: Icon(
                                               likedProductIds.contains(currentProductId)
