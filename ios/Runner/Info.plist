@@ -2,24 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-
-
-<key>GIDClientID</key>
-<string>207558440124-n06od8omcu3ced9sltn7qmmptqcmj4gs.apps.googleusercontent.com</string>
-<key>GIDServerClientID</key>
-<string>[YOUR SERVER CLIENT ID]</string>
-<key>CFBundleURLTypes</key>
-<array>
-	<dict>
-		<key>CFBundleTypeRole</key>
-		<string>Editor</string>
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>com.googleusercontent.apps.207558440124-n06od8omcu3ced9sltn7qmmptqcmj4gs</string>
-		</array>
-	</dict>
-</array>
-
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIDeviceFamily</key>
+    <array>
+        <integer>1</integer>
+    </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -38,41 +26,44 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.207558440124-n06od8omcu3ced9sltn7qmmptqcmj4gs</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GIDClientID</key>
+	<string>207558440124-n06od8omcu3ced9sltn7qmmptqcmj4gs.apps.googleusercontent.com</string>
+	<key>GIDServerClientID</key>
+	<string>[YOUR SERVER CLIENT ID]</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	  <key>NSCameraUsageDescription</key>
-      <string>Hezmart requires camera use</string>
-      <key>NSFaceIDUsageDescription</key>
-      <string>Hezmart uses this to securely grant you access</string>
-      <key>NSPhotoLibraryUsageDescription</key>
-      <string>Hezmart requires access to media library</string>
-      <key>NSPhotoLibraryUsageDescription</key>
-      <string>We need access to your photos to let you select images</string>
-      <key>NSCameraUsageDescription</key>
-      <string>We need access to your camera to take photos</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to take photos</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Hezmart uses this to securely grant you access</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photos to let you select images</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIStatusBarStyle</key>
+	<string></string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-
 </dict>
 </plist>

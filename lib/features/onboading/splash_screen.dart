@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
     if (SessionManager().isLoggedIn) {
       context.goNamed(PageUrl.home);
     } else {
-      context.goNamed(PageUrl.signin_screen);
+      context.goNamed(PageUrl.home);
     }
 }
 }

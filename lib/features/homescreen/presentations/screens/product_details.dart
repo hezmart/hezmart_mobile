@@ -26,6 +26,7 @@ import '../../../../core/di/injector.dart';
 import '../../../../core/navigation/path_params.dart';
 import '../../../../core/navigation/route_url.dart';
 import '../../../../core/theme/pallets.dart';
+import '../../../authentication/presentations/user_bloc/user_bloc.dart';
 import '../../../categories/data/data/category_repo_impl/category_repo.dart';
 import '../../../categories/presentations/category_bloc/category_bloc.dart';
 import '../../data/models/singleproduct_response.dart';
@@ -614,8 +615,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                         listener: _listenToAddCatState,
                         builder: (context, state) {
                           return CustomButton(
-                            onPressed: () {
+                            onPressed: injector.get<UserBloc>().appUser != null?() {
                               addToCart();
+                            }:(){
+                              CustomDialogs.showToast("Login to add to cart");
                             },
                             child: TextView(
                               text: "Add To Cart",
