@@ -21,7 +21,8 @@ import '../../../wishlist/presentations/fav_bloc/favourite_bloc.dart';
 import 'homescreen.dart';
 class ShopVendorProducts extends StatefulWidget {
   final String id ;
-  const ShopVendorProducts({super.key, required this.id});
+  final String name ;
+  const ShopVendorProducts({super.key, required this.id, required this.name});
 
   @override
   State<ShopVendorProducts> createState() => _ShopVendorProductsState();
@@ -43,7 +44,15 @@ class _ShopVendorProductsState extends State<ShopVendorProducts> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: CustomAppBar(
-        tittle: TextView(text: "Products",fontSize: 17,),
+        tittle: Row(
+          children: [
+            SizedBox(
+                width:170,
+                child: TextView(text: "${widget.name} ",fontSize: 18,maxLines: 1,textOverflow: TextOverflow.ellipsis,)),
+            6.horizontalSpace,
+
+          ],
+        ),
       ),
       body:
       BlocConsumer<ProductsBloc, ProductsState>(

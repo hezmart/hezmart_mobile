@@ -21,6 +21,7 @@ class PageUrl {
   static const shop_vendor_products = 'shop_vendor_products';
   static const search_screen = 'search_screen';
   static const help = 'help_tab';
+  static const privacy = 'privacy';
 
   ///cart
   static const mycart = 'my_cart';

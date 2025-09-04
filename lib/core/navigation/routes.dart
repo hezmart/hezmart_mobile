@@ -7,6 +7,7 @@ import 'package:hezmart/core/navigation/route_url.dart';
 import 'package:hezmart/features/account/presentations/screens/edit_profile.dart';
 import 'package:hezmart/features/account/presentations/screens/help_tab.dart';
 import 'package:hezmart/features/account/presentations/screens/my_profile.dart';
+import 'package:hezmart/features/account/presentations/screens/privacy.dart';
 import 'package:hezmart/features/authentication/presentations/screens/complete_account.dart';
 import 'package:hezmart/features/authentication/presentations/screens/create_new_password.dart';
 import 'package:hezmart/features/authentication/presentations/screens/otp_screen.dart';
@@ -213,6 +214,7 @@ class CustomRoutes {
         builder:
             (context, state) => ShopVendorProducts(
               id: state.uri.queryParameters[PathParam.id] ?? '',
+              name: state.uri.queryParameters[PathParam.userName] ?? '',
             ),
       ),
       GoRoute(
@@ -223,6 +225,12 @@ class CustomRoutes {
         path: '/help',
         name: PageUrl.help,
         builder: (context, state) => const HelpTab(),
+      ),
+
+      GoRoute(
+        path: '/privacy',
+        name: PageUrl.privacy,
+        builder: (context, state) => const PrivacyPolicy(),
       ),
       GoRoute(
         path: '/order_details',
