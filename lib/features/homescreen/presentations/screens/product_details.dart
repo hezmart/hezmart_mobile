@@ -235,18 +235,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
 
                           if (product?.images.isNotEmpty ?? false)
-                            Row(
-                              children: List.generate(
-                                product!.images.length,
-                                (i) => Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 10,
-                                    right: 10,
-                                  ),
-                                  child: ImageWidget(
-                                    imageUrl: product.images[i],
-                                    size: 100,
-                                    borderRadius: BorderRadius.circular(10),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: List.generate(
+                                  product!.images.length,
+                                  (i) => Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 10,
+                                      right: 10,
+                                    ),
+                                    child: ImageWidget(
+                                      imageUrl: product.images[i],
+                                      size: 100,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
                                 ),
                               ),

@@ -32,7 +32,7 @@ android {
         applicationId = "com.hezmart.shoppingapp"
         minSdk = 23
         targetSdk = 35
-        versionCode = 10
+        versionCode = 11
         versionName = flutter.versionName
         multiDexEnabled = true
     }

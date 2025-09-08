@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Hezmart needs access to your location to provide location-based services</string>
+
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>Hezmart needs access to your location even when closed to provide background location services</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIDeviceFamily</key>
