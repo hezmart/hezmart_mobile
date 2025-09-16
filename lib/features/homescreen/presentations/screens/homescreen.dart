@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +30,8 @@ import '../../../authentication/presentations/user_bloc/user_bloc.dart';
 import '../../../cart/data/data/cart_repo_impl.dart';
 import '../../../cart/data/models/cart_payload.dart';
 import '../../../cart/presentations/cartbloc/cart_bloc.dart';
+import '../../../categories/data/data/category_repo_impl/category_repo.dart';
+import '../../../categories/presentations/category_bloc/category_bloc.dart';
 import '../../../categories/presentations/screens/getsubcatss.dart';
 import '../../data/models/getall_products.dart';
 import '../widgets/brandnew.dart';
@@ -47,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
     "assets/images/pngs/shop.jpg",
     "assets/images/pngs/shop4.jpg",
     "assets/images/pngs/shop5.jpg",
+    "assets/images/pngs/shopping.jpg",
+    "assets/images/pngs/shopper.jpg",
   ];
   int _currentIndex = 0;
   final products = ProductsBloc(ProductRepositoryImpl(NetworkService()));
@@ -59,11 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final likedproduct = FavouriteBloc(
     MyfavouritesRepositoryImpl(NetworkService()),
   );
+  final allcat = CategoryBloc(CategoryRepositoryImpl(NetworkService()));
+
   @override
   void initState() {
     // TODO: implement initState
     likedproduct.add(GetfavouriteEvent());
     products.add(GetAllProductsEvent());
+    allcat.add(AllCategoryEvent());
 
     super.initState();
   }
@@ -75,22 +81,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _refreshHome() async {
     products.add(GetAllProductsEvent());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: UpgradeAlert(
-        dialogStyle: Platform.isIOS
-        ? UpgradeDialogStyle.cupertino
-        : UpgradeDialogStyle.material,
-        shouldPopScope: ()=>true,
-    upgrader: Upgrader(
-
-    durationUntilAlertAgain: Duration(
-    days: 2,
-
-    ),
-
-    ),
+        dialogStyle:
+            Platform.isIOS
+                ? UpgradeDialogStyle.cupertino
+                : UpgradeDialogStyle.material,
+        shouldPopScope: () => true,
+        upgrader: Upgrader(durationUntilAlertAgain: Duration(days: 5)),
         child: SingleChildScrollView(
           child: BlocConsumer<ProductsBloc, ProductsState>(
             bloc: products,
@@ -112,7 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state is ProductsSuccessState) {
                 String formatNumberWithCommas(String number) {
                   try {
-                    final parsedNumber = double.parse(number.replaceAll(',', ''));
+                    final parsedNumber = double.parse(
+                      number.replaceAll(',', ''),
+                    );
                     return parsedNumber
                         .toStringAsFixed(0)
                         .replaceAllMapped(
@@ -143,8 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
 
                 return RefreshIndicator(
-
-                  onRefresh:_refreshHome,
+                  onRefresh: _refreshHome,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Column(
@@ -171,11 +173,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       imageUrl: image,
                                       width: 1.sw,
                                       fit: BoxFit.cover,
-                                      height: 200,
+                                      height: 150,
                                     );
                                   }).toList(),
                               options: CarouselOptions(
-                                height: 200,
+                                height: 150,
                                 autoPlay: true,
                                 enlargeCenterPage: true,
                                 aspectRatio: 16 / 9,
@@ -196,8 +198,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 10.verticalSpace,
                                 TextView(
-                                  text: "Get Quality products at affordable prices",
-                                  fontSize: 25,
+                                  text:
+                                      "Get Quality products at affordable prices",
+                                  fontSize: 20,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
                                   align: TextAlign.center,
@@ -212,8 +215,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 50,
                                     width: 200,
                                     padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                                      color: Color(0xffE67002)
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xffE67002),
                                     ),
                                     child: TextView(
                                       text: "Shop Now",
@@ -260,7 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color:
                                               _currentIndex == entry.key
                                                   ? Colors.white
-                                                  : Colors.white.withOpacity(0.4),
+                                                  : Colors.white.withOpacity(
+                                                    0.4,
+                                                  ),
                                         ),
                                       );
                                     }).toList(),
@@ -268,9 +274,228 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-
                         20.verticalSpace,
 
+                        SizedBox(
+                          height: 270,
+                          child: BlocConsumer<CategoryBloc, CategoryState>(
+                            listener: (context, state) {
+                              // TODO: implement listener
+                            },
+                            bloc: allcat,
+                            builder: (context, state) {
+                              if (state is CategoryloadinggState) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: List.generate(
+                                        5,
+                                            (index) => Container(
+                                          width: 100,
+                                          height: 100,
+                                          margin: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Pallets.grey95.withOpacity(0.5),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 12),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: List.generate(
+                                        5,
+                                            (index) => Container(
+                                          width: 100,
+                                          height: 100,
+                                          margin: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Pallets.grey95.withOpacity(0.5),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+                              if (state is CategorySuccessState) {
+                                final allCategories = state.response.data!.categories;
+
+                                final halfLength = (allCategories.length / 2).ceil();
+                                final firstRowCategories = allCategories.take(halfLength).toList();
+                                final secondRowCategories = allCategories.skip(halfLength).toList();
+
+                                return Container(
+                                  width: 1.sw,
+
+                                  padding: EdgeInsets.all(10),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // First row
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: firstRowCategories.map((category) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                context.pushNamed(
+                                                  PageUrl.see_all,
+                                                  queryParameters: {
+                                                    PathParam.id: category.id.toString(),
+                                                    PathParam.userName: category.name.toString(),
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 100,
+                                                height: 100,
+                                                margin: EdgeInsets.all(8),
+                                                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                  border: Border.all(color: Pallets.grey95.withOpacity(0.2)),
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 70,width: 100,
+                                                      child: ImageWidget(
+                                                        onTap: () {
+                                                          context.pushNamed(
+                                                            PageUrl.see_all,
+                                                            queryParameters: {
+                                                              PathParam.id: category.id.toString(),
+                                                              PathParam.userName: category.name.toString(),
+                                                            },
+                                                          );
+                                                        },
+                                                        imageUrl: category.icon ?? '',
+                                                        fit: BoxFit.cover,
+                                                        borderRadius: BorderRadius.circular(5),
+                                                      ),
+                                                    ),
+                                                    2.verticalSpace,
+                                                    TextView(
+                                                      text: category.name.toString(),
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.w400,
+                                                      align: TextAlign.center,
+                                                      maxLines: 1,
+                                                      textOverflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                        if (secondRowCategories.isNotEmpty)
+                                        if (secondRowCategories.isNotEmpty)
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: secondRowCategories.map((category) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  context.pushNamed(
+                                                    PageUrl.see_all,
+                                                    queryParameters: {
+                                                      PathParam.id: category.id.toString(),
+                                                      PathParam.userName: category.name.toString(),
+                                                    },
+                                                  );
+                                                },
+                                                child: Container(
+                                                  width: 100,
+                                                  height: 100,
+                                                  margin: EdgeInsets.all(7),
+                                                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(20),
+                                                    border: Border.all(color: Pallets.grey90.withOpacity(0.3)),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 70,width: 100,
+                                                        child: ImageWidget(
+                                                          onTap: () {
+                                                            context.pushNamed(
+                                                              PageUrl.see_all,
+                                                              queryParameters: {
+                                                                PathParam.id: category.id.toString(),
+                                                                PathParam.userName: category.name.toString(),
+                                                              },
+                                                            );
+                                                          },
+                                                          imageUrl: category.icon ?? '',
+                                                          fit: BoxFit.cover,
+                                                          borderRadius: BorderRadius.circular(5),
+                                                        ),
+                                                      ),
+                                                      2.verticalSpace,
+                                                      TextView(
+                                                        text: category.name.toString(),
+                                                        fontSize: 10,
+                                                        fontWeight: FontWeight.w400,
+                                                        align: TextAlign.center,
+                                                        maxLines: 1,
+                                                        textOverflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              if (state is CategoryfailiureState) {
+                                return SizedBox(
+                                  height: 1.sh,
+                                  child: Center(
+                                    child: AppPromptWidget(
+                                      onTap: () {
+                                        allcat.add(AllCategoryEvent());
+                                      },
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return SizedBox(); // Default return
+                            },
+                          ),
+                        ),
+                        Container(
+                          height: 10,
+                          width: 1.sw,
+                          color: Colors.purple.withOpacity(0.4),
+                        ),
+
+                        SizedBox(
+
+                          child: FlashSales(),
+                        ),
+                        Container(
+                          height: 10,
+                          width: 1.sw,
+                          color: Colors.purple.withOpacity(0.4),
+                        ),
+                        // 10.verticalSpace,
+
+                        0.verticalSpace,
                         Column(
                           children:
                               productsByCategory.entries.map((entry) {
@@ -306,7 +531,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 PageUrl.see_all,
                                                 queryParameters: {
                                                   PathParam.id: categoryId,
-                                                  PathParam.userName: categoryName,
+                                                  PathParam.userName:
+                                                      categoryName,
                                                 },
                                               );
                                             },
@@ -340,13 +566,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                           int calculateDiscountPercentage(
                                             String price,
                                             String discountPrice,
-                                          ) {
+                                          )
+                                          {
                                             final double originalPrice =
                                                 double.tryParse(price) ?? 0;
                                             final double discountedPrice =
-                                                double.tryParse(discountPrice) ?? 0;
+                                                double.tryParse(
+                                                  discountPrice,
+                                                ) ??
+                                                0;
                                             if (discountedPrice <= 0 ||
-                                                discountedPrice >= originalPrice)
+                                                discountedPrice >=
+                                                    originalPrice)
                                               return 0;
                                             return ((1 -
                                                         discountedPrice /
@@ -356,15 +587,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           }
 
                                           final productId = prod.id.toString();
-                                          final isLiked = likedProductIds.contains(
-                                            productId,
-                                          );
+                                          final isLiked = likedProductIds
+                                              .contains(productId);
 
                                           return Container(
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(
-                                                10,
-                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                               border: Border.all(
                                                 color: Pallets.grey95,
                                               ),
@@ -382,7 +611,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             Colors.transparent,
                                                         onTap: () {
                                                           context.pushNamed(
-                                                            PageUrl.product_details,
+                                                            PageUrl
+                                                                .product_details,
                                                             queryParameters: {
                                                               PathParam.id:
                                                                   prod.id
@@ -397,7 +627,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   prod.coverImage
                                                                       .toString(),
                                                               size: 150,
-                                                              fit: BoxFit.scaleDown,
+                                                              fit:
+                                                                  BoxFit
+                                                                      .scaleDown,
                                                             ),
                                                           ),
                                                         ),
@@ -416,7 +648,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         children: [
                                                           InkWell(
                                                             splashColor:
-                                                                Colors.transparent,
+                                                                Colors
+                                                                    .transparent,
                                                             onTap: () {
                                                               context.pushNamed(
                                                                 PageUrl
@@ -456,31 +689,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           true,
                                                                       initialRating:
                                                                           double.tryParse(
-                                                                            prod.ratingsAverage
-                                                                                .toString(),
+                                                                            prod.ratingsAverage.toString(),
                                                                           ) ??
                                                                           0,
                                                                       direction:
                                                                           Axis.horizontal,
-                                                                      itemSize: 16,
+                                                                      itemSize:
+                                                                          16,
                                                                       allowHalfRating:
                                                                           false,
-                                                                      itemCount: 5,
+                                                                      itemCount:
+                                                                          5,
                                                                       unratedColor:
                                                                           Pallets
                                                                               .grey90,
-                                                                      itemPadding:
-                                                                          EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                0.0,
-                                                                          ),
+                                                                      itemPadding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            0.0,
+                                                                      ),
                                                                       itemBuilder:
                                                                           (
                                                                             context,
                                                                             _,
                                                                           ) => const Icon(
-                                                                            Icons
-                                                                                .star_border_outlined,
+                                                                            Icons.star_border_outlined,
                                                                             color:
                                                                                 Colors.amber,
                                                                             size:
@@ -525,42 +757,76 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    BlocConsumer<CartBloc, CartState>(
-                                                                      bloc: cart,
-                                                                      listener:(BuildContext context, CartState state) {
-                                                                        if (state is AddCartloadingState) {
-                                                                          CustomDialogs.showLoading(context,barrierColor: Colors.transparent);
+                                                                    BlocConsumer<
+                                                                      CartBloc,
+                                                                      CartState
+                                                                    >(
+                                                                      bloc:
+                                                                          cart,
+                                                                      listener: (
+                                                                        BuildContext
+                                                                        context,
+                                                                        CartState
+                                                                        state,
+                                                                      ) {
+                                                                        if (state
+                                                                            is AddCartloadingState) {
+                                                                          CustomDialogs.showLoading(
+                                                                            context,
+                                                                            barrierColor:
+                                                                                Colors.transparent,
+                                                                          );
                                                                         }
-                                                                        if (state is CartfailiureState) {
-                                                                          context.pop();
-                                                                          CustomDialogs.error(state.error);
+                                                                        if (state
+                                                                            is CartfailiureState) {
+                                                                          context
+                                                                              .pop();
+                                                                          CustomDialogs.error(
+                                                                            state.error,
+                                                                          );
                                                                         }
-                                                                        if (state is AddCartSuccessState) {
-                                                                          context.pop();
-                                                                          CustomDialogs.success("Item added to cart");
+                                                                        if (state
+                                                                            is AddCartSuccessState) {
+                                                                          context
+                                                                              .pop();
+                                                                          CustomDialogs.success(
+                                                                            "Item added to cart",
+                                                                          );
                                                                         }
                                                                       },
 
-                                                                      builder: (context, state,) {
+                                                                      builder: (
+                                                                        context,
+                                                                        state,
+                                                                      ) {
                                                                         return InkWell(
-                                                                          splashColor: Colors.transparent,
-                                                                          onTap: injector.get<UserBloc>().appUser != null?() {
-                                                                            addToCart(
-                                                                              productId,
-                                                                            );
-                                                                          }:(){
-                                                                            CustomDialogs.showToast("Login to add to cart");
-                                                                          },
+                                                                          splashColor:
+                                                                              Colors.transparent,
+                                                                          onTap:
+                                                                              injector
+                                                                                          .get<
+                                                                                            UserBloc
+                                                                                          >()
+                                                                                          .appUser !=
+                                                                                      null
+                                                                                  ? () {
+                                                                                    addToCart(
+                                                                                      productId,
+                                                                                    );
+                                                                                  }
+                                                                                  : () {
+                                                                                    CustomDialogs.showToast(
+                                                                                      "Login to add to cart",
+                                                                                    );
+                                                                                  },
                                                                           child: CircleAvatar(
-                                                                            backgroundColor:
-                                                                                Color(
-                                                                                  0xffE67002,
-                                                                                ),
+                                                                            backgroundColor: Color(
+                                                                              0xffE67002,
+                                                                            ),
                                                                             radius:
                                                                                 14,
                                                                             child: Icon(
-                                                                              Icons
-                                                                                  .add_shopping_cart,
+                                                                              Icons.add_shopping_cart,
                                                                               size:
                                                                                   16,
                                                                               color:
@@ -583,59 +849,117 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ],
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                    left: 5,
-                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                        left: 5,
+                                                      ),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
-                                                      BlocConsumer<FavouriteBloc, FavouriteState>(
+                                                      BlocConsumer<
+                                                        FavouriteBloc,
+                                                        FavouriteState
+                                                      >(
                                                         bloc: likeproduct,
-                                                        listener: (context, state) {
-                                                          if (state is FavouriteloadingState) {
-                                                            CustomDialogs.showLoading(context, barrierColor: Colors.transparent);
+                                                        listener: (
+                                                          context,
+                                                          state,
+                                                        ) {
+                                                          if (state
+                                                              is FavouriteloadingState) {
+                                                            CustomDialogs.showLoading(
+                                                              context,
+                                                              barrierColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                            );
                                                           }
-                                                          if (state is FavouritefailiureState) {
+                                                          if (state
+                                                              is FavouritefailiureState) {
                                                             context.pop();
                                                           }
-                                                          if (state is FavouritelikeSuccessState) {
+                                                          if (state
+                                                              is FavouritelikeSuccessState) {
                                                             context.pop();
-                                                            likedProductIds.add(state.productId);
+                                                            likedProductIds.add(
+                                                              state.productId,
+                                                            );
                                                             setState(() {});
-                                                            CustomDialogs.showToast("Added to favourite");
+                                                            CustomDialogs.showToast(
+                                                              "Added to favourite",
+                                                            );
                                                           }
-                                                          if (state is FavouriteUnlikeSuccessState) {
+                                                          if (state
+                                                              is FavouriteUnlikeSuccessState) {
                                                             context.pop();
-                                                            likedProductIds.remove(state.productId);
+                                                            likedProductIds
+                                                                .remove(
+                                                                  state
+                                                                      .productId,
+                                                                );
                                                             setState(() {});
-                                                            CustomDialogs.showToast("Removed from favourite");
+                                                            CustomDialogs.showToast(
+                                                              "Removed from favourite",
+                                                            );
                                                           }
                                                         },
-                                                        builder: (context, state) {
-                                                          final currentProductId = prod.id.toString(); // ✅ Get from loop item
+                                                        builder: (
+                                                          context,
+                                                          state,
+                                                        ) {
+                                                          final currentProductId =
+                                                              prod.id
+                                                                  .toString(); // ✅ Get from loop item
 
                                                           return CircleAvatar(
                                                             radius: 15,
-                                                            backgroundColor: Pallets.white,
+                                                            backgroundColor:
+                                                                Pallets.white,
                                                             child: GestureDetector(
-                                                              onTap: injector.get<UserBloc>().appUser != null?() {
-                                                                if (likedProductIds.contains(currentProductId)) {
-                                                                  likeproduct.add(UnlikeItemEvent(currentProductId)); // ✅ send correct id
-                                                                } else {
-                                                                  likeproduct.add(LikeItemEvent(currentProductId));
-                                                                }
-                                                              }:(){
-                                                                CustomDialogs.showToast("Login to add favorite");
-                                                              },
+                                                              onTap:
+                                                                  injector.get<UserBloc>().appUser !=
+                                                                          null
+                                                                      ? () {
+                                                                        if (likedProductIds.contains(
+                                                                          currentProductId,
+                                                                        )) {
+                                                                          likeproduct.add(
+                                                                            UnlikeItemEvent(
+                                                                              currentProductId,
+                                                                            ),
+                                                                          ); // ✅ send correct id
+                                                                        } else {
+                                                                          likeproduct.add(
+                                                                            LikeItemEvent(
+                                                                              currentProductId,
+                                                                            ),
+                                                                          );
+                                                                        }
+                                                                      }
+                                                                      : () {
+                                                                        CustomDialogs.showToast(
+                                                                          "Login to add favorite",
+                                                                        );
+                                                                      },
                                                               child: Icon(
-                                                                likedProductIds.contains(currentProductId)
-                                                                    ? Icons.favorite
-                                                                    : Icons.favorite_border,
-                                                                color: likedProductIds.contains(currentProductId)
-                                                                    ? Colors.red
-                                                                    : Colors.black,
+                                                                likedProductIds
+                                                                        .contains(
+                                                                          currentProductId,
+                                                                        )
+                                                                    ? Icons
+                                                                        .favorite
+                                                                    : Icons
+                                                                        .favorite_border,
+                                                                color:
+                                                                    likedProductIds.contains(
+                                                                          currentProductId,
+                                                                        )
+                                                                        ? Colors
+                                                                            .red
+                                                                        : Colors
+                                                                            .black,
                                                                 size: 18,
                                                               ),
                                                             ),
@@ -643,12 +967,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         },
                                                       ),
 
-
-
                                                       Container(
                                                         height: 30,
                                                         width: 55,
-                                                        padding: EdgeInsets.all(5),
+                                                        padding: EdgeInsets.all(
+                                                          5,
+                                                        ),
                                                         decoration: BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius.only(
@@ -661,7 +985,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       10,
                                                                     ),
                                                               ),
-                                                          color: Color(0xff3567a6),
+                                                          color: Color(
+                                                            0xff3567a6,
+                                                          ),
                                                         ),
                                                         child: Center(
                                                           child: TextView(
@@ -689,7 +1015,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               }).toList(),
                         ),
 
-                        // 10.verticalSpace,
                         70.verticalSpace,
                       ],
                     ),
@@ -830,6 +1155,7 @@ class StockIndicator extends StatelessWidget {
     return Colors.grey;
   }
 }
+
 // TextView(
 //   text: "Featured Products",
 //   fontSize: 25,

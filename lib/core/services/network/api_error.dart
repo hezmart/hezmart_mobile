@@ -225,6 +225,19 @@ String _setCustomErrorMessage(Response error) {
     );
     errorMessageList.addAll(errorMessages);
   }
+
+  if (error.data['errors'] is Map<String, dynamic>) {
+    final errors = error.data['errors'] as Map<String, dynamic>;
+    errors.forEach((key, value) {
+      if (value is String) {
+        errorMessageList.add(value);
+      } else if (value is List) {
+        errorMessageList.addAll(List<String>.from(value));
+      }
+    });
+  }
+
+
   if (error.data['data'] is String) {
     errorMessageList.add(error.data['data']);
   }

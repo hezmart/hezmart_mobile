@@ -20,6 +20,7 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../common/widgets/custom_outlined_button.dart';
 import '../../../../common/widgets/image_widget.dart';
 import '../../../../core/navigation/path_params.dart';
+import '../../../../core/utils/helper_utils.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -74,7 +75,7 @@ class _SignupScreenState extends State<SignupScreen> {
     "Sokoto State",
     "Taraba State",
     "Yobe State",
-    "Zamfara State"
+    "Zamfara State",
   ];
   final auth = AuthBloc(AuthRepositoryImpl(NetworkService()));
   final googleauth = AuthBloc(AuthRepositoryImpl(NetworkService()));
@@ -101,8 +102,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         fontSize: 25,
                         fontWeight: FontWeight.w500,
                       ),
-                      TextView(text: "Shop smarter with Hezmart - sign up for deals, quick checkouts & tailored recommendations!",
-                      fontSize: 12,),
+                      TextView(
+                        text:
+                            "Shop smarter with Hezmart - sign up for deals, quick checkouts & tailored recommendations!",
+                        fontSize: 12,
+                      ),
                     ],
                   ),
                 ),
@@ -145,9 +149,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   controller: addresscontroller,
                   hint: "address",
                   validator:
-                  MultiValidator([
-                    RequiredValidator(errorText: 'This field is required'),
-                  ]).call,
+                      MultiValidator([
+                        RequiredValidator(errorText: 'This field is required'),
+                      ]).call,
                 ),
                 15.verticalSpace,
                 TextView(text: "State"),
@@ -173,13 +177,15 @@ class _SignupScreenState extends State<SignupScreen> {
                           selectedReason = value;
                         });
                       },
-                      items: nigeriaStates
-                          .map((String state) => DropdownMenuItem<String>(
-                        value: state,
-                        child:
-                        TextView(text: state, fontSize: 16),
-                      ))
-                          .toList(),
+                      items:
+                          nigeriaStates
+                              .map(
+                                (String state) => DropdownMenuItem<String>(
+                                  value: state,
+                                  child: TextView(text: state, fontSize: 16),
+                                ),
+                              )
+                              .toList(),
                       buttonStyleData: const ButtonStyleData(
                         padding: EdgeInsets.symmetric(horizontal: 0),
                       ),
@@ -191,8 +197,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       iconStyleData: const IconStyleData(
-                        icon: Icon(Iconsax.arrow_down_1,
-                            color: Pallets.grey75),
+                        icon: Icon(Iconsax.arrow_down_1, color: Pallets.grey75),
                       ),
                     ),
                   ),
@@ -204,9 +209,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   hint: "phone number",
                   controller: numbercontroller,
                   validator:
-                  MultiValidator([
-                    RequiredValidator(errorText: 'This field is required'),
-                  ]).call,
+                      MultiValidator([
+                        RequiredValidator(errorText: 'This field is required'),
+                      ]).call,
                 ),
                 15.verticalSpace,
                 TextView(text: "Create Password"),
@@ -252,6 +257,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     4.horizontalSpace,
                     TextView(
+                      onTap: () {
+                        Helpers.launchRawUrl(
+                          'https://hezmart.com/privacy-policy',
+                        );
+                      },
+
                       text: "Terms of Service",
                       fontSize: 14,
                       color: Color(0xffE67002),
@@ -294,44 +305,44 @@ class _SignupScreenState extends State<SignupScreen> {
                   ],
                 ),
                 20.verticalSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(width: 100, child: Divider()),
-                    10.horizontalSpace,
-                    TextView(text: "Or connect with"),
-                    10.horizontalSpace,
 
-                    SizedBox(width: 100, child: Divider()),
-                  ],
-                ),
-                30.verticalSpace,
-                BlocConsumer<AuthBloc, AuthState>(
-                  bloc: googleauth,
-                  listener: _listenToAuthGoogleState,
-                  builder: (context, state) {
-                    return CustomOutlinedButton(
-                      radius: 10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ImageWidget(imageUrl: "assets/images/pngs/gg.png"),
-                          30.horizontalSpace,
-                          TextView(
-                            text: "Continue with Google",
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {
-                        googleAuth();
-                      },
-                    );
-                  },
-                ),
-
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     SizedBox(width: 100, child: Divider()),
+                //     10.horizontalSpace,
+                //     TextView(text: "Or connect with"),
+                //     10.horizontalSpace,
+                //
+                //     SizedBox(width: 100, child: Divider()),
+                //   ],
+                // ),
+                // 30.verticalSpace,
+                // BlocConsumer<AuthBloc, AuthState>(
+                //   bloc: googleauth,
+                //   listener: _listenToAuthGoogleState,
+                //   builder: (context, state) {
+                //     return CustomOutlinedButton(
+                //       radius: 10,
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           ImageWidget(imageUrl: "assets/images/pngs/gg.png"),
+                //           30.horizontalSpace,
+                //           TextView(
+                //             text: "Continue with Google",
+                //             color: Colors.black,
+                //             fontWeight: FontWeight.w600,
+                //             fontSize: 14,
+                //           ),
+                //         ],
+                //       ),
+                //       onPressed: () {
+                //         googleAuth();
+                //       },
+                //     );
+                //   },
+                // ),
               ],
             ),
           ),
@@ -365,27 +376,27 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _listenToAuthState(BuildContext context, AuthState state) {
-    if(state is AuthloadingState){
+    if (state is AuthloadingState) {
       CustomDialogs.showLoading(context);
     }
-    if(state  is AuthfailiureState){
+    if (state is AuthfailiureState) {
       context.pop();
       CustomDialogs.error(state.error);
     }
-    if(state is AuthSuccessState){
+    if (state is AuthSuccessState) {
       context.pop();
       CustomDialogs.success("Registration Successful");
-      context.goNamed(PageUrl.signup_otp,
-        queryParameters: {PathParam.email: emailController.text.trim()}
-
+      context.goNamed(
+        PageUrl.signup_otp,
+        queryParameters: {PathParam.email: emailController.text.trim()},
       );
-
     }
   }
 
   void googleAuth() {
     googleauth.add(GoogleSignUpEvent());
   }
+
   void _listenToAuthGoogleState(BuildContext context, AuthState state) {
     if (state is AuthloadingState) {
       CustomDialogs.showLoading(context);
@@ -400,5 +411,4 @@ class _SignupScreenState extends State<SignupScreen> {
       context.goNamed(PageUrl.home);
     }
   }
-
 }

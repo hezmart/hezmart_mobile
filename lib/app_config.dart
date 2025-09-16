@@ -47,7 +47,7 @@ class AppConfig {
     // await initializeDB();
     await initCore();
     await setup();
-    runApp(const WorksndShop());
+    runApp(const Hezmart());
     // FlutterNativeSplash.remove();
   }
 

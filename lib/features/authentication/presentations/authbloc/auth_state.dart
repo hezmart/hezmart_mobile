@@ -14,8 +14,9 @@ class AuthloadingState extends AuthState {
 }
 class AuthfailiureState extends AuthState {
   String error;
+  ErrorResponse? response;
 
-  AuthfailiureState(this.error);
+  AuthfailiureState(this.error,);
 
   @override
   List<Object> get props => [error];

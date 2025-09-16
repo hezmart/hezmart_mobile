@@ -25,6 +25,7 @@ import 'package:hezmart/features/homescreen/presentations/screens/see_all.dart';
 import 'package:hezmart/features/homescreen/presentations/screens/shop_vendor_products.dart';
 import 'package:hezmart/features/homescreen/presentations/screens/shopsscreen.dart';
 import 'package:hezmart/features/homescreen/presentations/widgets/description_details.dart';
+import 'package:hezmart/features/homescreen/presentations/widgets/weekly_offer.dart';
 import 'package:hezmart/features/my_orders/presentations/sscreens/my_orders.dart';
 import 'package:hezmart/features/my_orders/presentations/sscreens/order_details.dart';
 import 'package:hezmart/features/my_orders/presentations/sscreens/track_order.dart';
@@ -225,6 +226,11 @@ class CustomRoutes {
         path: '/help',
         name: PageUrl.help,
         builder: (context, state) => const HelpTab(),
+      ),
+  GoRoute(
+        path: '/weekly_offer',
+        name: PageUrl.weekly_offer,
+        builder: (context, state) => const WeeklyOffer(),
       ),
 
       GoRoute(

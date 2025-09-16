@@ -11,11 +11,11 @@ import 'core/services/theme_service/app_theme.dart';
 
 void main() {
   AppConfig.initializeAndRunInstance(
-      appName: "Worksndshop", enviroment: Environment.staging);
+      appName: "Hezmart", enviroment: Environment.staging);
 }
 
-class WorksndShop extends StatelessWidget {
-  const WorksndShop({super.key});
+class Hezmart extends StatelessWidget {
+  const Hezmart({super.key});
 
   // This widget is the root of your application.
   @override

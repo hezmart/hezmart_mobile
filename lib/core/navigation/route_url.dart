@@ -22,6 +22,7 @@ class PageUrl {
   static const search_screen = 'search_screen';
   static const help = 'help_tab';
   static const privacy = 'privacy';
+  static const weekly_offer = 'weekly_offer';
 
   ///cart
   static const mycart = 'my_cart';

@@ -100,8 +100,8 @@ class UrlConfig {
 
   ///categories
   static const String allcategory = 'https://api.hezmart.com/api/v1/categories';
-  static const String subcategory = 'https://api.hezmart.com/api/v1/products';
-  static const String similarpro = 'https://api.hezmart.com/api/v1/products';
+  static const String subcategory = 'https://api.hezmart.com/api/v1/products?status=active';
+  static const String similarpro = 'https://api.hezmart.com/api/v1/products?status=active';
   static const String allsubcat =
       'https://api.hezmart.com/api/v1/subcategories';
 

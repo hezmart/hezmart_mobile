@@ -233,27 +233,62 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ],
                             ),
                           ),
-
-                          if (product?.images.isNotEmpty ?? false)
+                          product!.images.isEmpty?SizedBox():
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: List.generate(
-                                  product!.images.length,
-                                  (i) => Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 10,
-                                      right: 10,
-                                    ),
-                                    child: ImageWidget(
-                                      imageUrl: product.images[i],
-                                      size: 100,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
+                                children: product!.images!.map((imageUrl) =>
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) => ViewImage(imageUrl: imageUrl),
+                                            )
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 10, right: 10),
+                                        child: ImageWidget(
+                                          imageUrl: imageUrl,
+                                          size: 100,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    )
+                                ).toList(),
                               ),
                             ),
+                          // if (product?.images.isNotEmpty ?? false)
+                          //   SingleChildScrollView(
+                          //     scrollDirection: Axis.horizontal,
+                          //     child: Row(
+                          //       children: List.generate(
+                          //         product!.images.length,
+                          //         (i) => InkWell(
+                          //           onTap: (){
+                          //             Navigator.push(context, CupertinoPageRoute(
+                          //               builder: (context) => ViewImage(
+                          //                 imageUrl: product.images[i],
+                          //               ),
+                          //
+                          //             ));
+                          //           },
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.only(
+                          //               top: 10,
+                          //               right: 10,
+                          //             ),
+                          //             child: ImageWidget(
+                          //               imageUrl: product.images[i],
+                          //               size: 100,
+                          //               borderRadius: BorderRadius.circular(10),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
 
                           20.verticalSpace,
                           TextView(
@@ -934,5 +969,34 @@ class _SimilaProductState extends State<SimilaProduct> {
     return SizedBox();
   },
 );
+  }
+}
+
+
+class ViewImage extends StatefulWidget {
+  final String imageUrl;
+  const ViewImage({super.key, required this.imageUrl});
+
+  @override
+  State<ViewImage> createState() => _ViewImageState();
+}
+
+class _ViewImageState extends State<ViewImage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(),
+
+      body: Center(
+        child: InteractiveViewer(
+          child: Image.network(
+           widget.imageUrl,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) =>
+                Icon(Icons.broken_image, color: Colors.white),
+          ),
+        ),
+      ),
+    );
   }
 }

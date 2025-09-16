@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,14 @@ import 'package:hezmart/core/navigation/route_url.dart';
 import 'package:hezmart/core/theme/pallets.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 
+import '../../../../common/widgets/custom_dialogs.dart';
+import '../../../../common/widgets/error_widget.dart';
+import '../../../../core/navigation/path_params.dart';
+import '../../../../core/services/network/network_service.dart';
+import '../../data/data/product_repo_impl/product_repo_impl.dart';
+import '../bloc/products_bloc.dart';
+import '../screens/homescreen.dart';
+
 class FlashSales extends StatefulWidget {
   const FlashSales({super.key});
 
@@ -16,194 +25,310 @@ class FlashSales extends StatefulWidget {
 }
 
 class _FlashSalesState extends State<FlashSales> {
+  final products = ProductsBloc(ProductRepositoryImpl(NetworkService()));
+
+  @override
+  void initState() {
+    products.add(GetAllProductsEvent());
+    super.initState();
+  }
+
   double _rating = 4.0;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 60),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            color: Color(0xffFF4545),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextView(
-                  text: "Weekly Sales",
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 17,
+    return SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: BlocConsumer<ProductsBloc, ProductsState>(
+          listener: _listenToProductState,
+          bloc: products,
+          builder: (context, state) {
+            if (state is ProductsFailiureState) {
+              return SizedBox(
+                height: 1.sh,
+                child: Center(
+                  child: AppPromptWidget(
+                    onTap: () {
+                      products.add(GetAllProductsEvent());
+                    },
+                  ),
                 ),
-                40.horizontalSpace,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextView(
-                      text: "Time Left:",
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                    TextView(
-                      text: "87H : 60M : 15S",
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ],
-                ),
-                30.horizontalSpace,
-              ],
-            ),
-          ),
-          // GridView.builder(
-          //   shrinkWrap: true,
-          //   physics: NeverScrollableScrollPhysics(),
-          //   padding: EdgeInsets.all(10),
-          //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //     crossAxisCount: 2,
-          //     childAspectRatio: 0.7,
-          //     mainAxisSpacing: 10,
-          //     crossAxisSpacing: 10,
-          //   ),
-          //   itemCount: 6,
-          //   itemBuilder: (context, index) {
-          //     return Container(
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(10),
-          //         border: Border.all(color: Pallets.grey95),
-          //       ),
-          //       child: Stack(
-          //         children:[
-          //           Padding(
-          //             padding: const EdgeInsets.only(left: 5),
-          //             child: Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               children: [
-          //                 Icon(Icons.favorite_border,size: 18,),
-          //                 Container(
-          //                   height: 40,
-          //                   width: 40,
-          //                   padding: EdgeInsets.all(5),
-          //                   decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(10),
-          //                   bottomLeft:  Radius.circular(10)),
-          //                 color:Color(0xffFF4545), ),
-          //                 child:
-          //                   Center(child: TextView(text: "-50",color: Colors.white,fontWeight: FontWeight.w600,)),)
-          //               ],
-          //             ),
-          //           ),
-          //           Column(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               InkWell(
-          //                 splashColor: Colors.transparent,
-          //                 onTap: (){
-          //                   context.pushNamed(PageUrl.product_details);
-          //                 },
-          //                 child: IgnorePointer(
-          //                   child: ImageWidget(
-          //                     imageUrl: "assets/images/pngs/pizza.png",
-          //                     size: 150,
-          //                     fit: BoxFit.cover,
-          //                   ),
-          //                 ),
-          //               ),
-          //               Padding(
-          //                 padding: const EdgeInsets.symmetric(horizontal: 5),
-          //                 child: Column(
-          //                   crossAxisAlignment: CrossAxisAlignment.start,
-          //                   children: [
-          //                     InkWell(
-          //                       splashColor: Colors.transparent,
-          //                       onTap: (){
-          //                         context.pushNamed(PageUrl.product_details);
-          //                       },
-          //                       child: Column(
-          //                         crossAxisAlignment: CrossAxisAlignment.start,
-          //                         children: [
-          //                           TextView(text: "Pizza Pack, Family size",fontSize: 13,),
-          //                           Row(
-          //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                             children: [
-          //                               TextView(text: "₦5,000",fontWeight: FontWeight.w700,),
-          //                               TextView(text: "₦7,000"),
-          //                             ],
-          //                           ),
-          //                           Row(
-          //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                             children: [
-          //                               TextView(text: "10 units left",fontWeight: FontWeight.w300,fontSize: 10,),
-          //                               RatingBar.builder(
-          //                                 initialRating: 4,
-          //                                 minRating: 1,
-          //                                 direction: Axis.horizontal,
-          //                                 itemSize: 16,
-          //                                 allowHalfRating: false,
-          //                                 itemCount: 5,
-          //                                 unratedColor: Pallets.grey90,
-          //                                 itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-          //                                 itemBuilder: (context, _) => const Icon(
-          //                                   Icons.star_border_outlined,
-          //                                   color: Colors.amber,
-          //                                   size: 14,
-          //                                 ),
-          //                                 onRatingUpdate: (rating) {
-          //                                   print(rating);
-          //                                   setState(() {
-          //                                     setState(() {
-          //                                       _rating = rating;
-          //                                     });
-          //                                   });
-          //                                 },
-          //                               )
-          //                             ],
-          //                           ),
-          //                         ],
-          //                       ),
-          //                     ),
-          //                     6.verticalSpace,
-          //
-          //                     LinearProgressBar(
-          //                       maxSteps: 6,
-          //                       progressType: LinearProgressBar.progressTypeLinear, // Use Linear progress
-          //                       currentStep: 1,
-          //                       progressColor: Pallets.successGreen,
-          //                       backgroundColor: Pallets.grey95,
-          //                       borderRadius: BorderRadius.circular(10),
-          //                     ),
-          //                     6.verticalSpace,
-          //                     Container(
-          //                       padding: EdgeInsets.all(5),
-          //                       decoration: BoxDecoration(
-          //                           borderRadius: BorderRadius.circular(20),
-          //                           gradient: LinearGradient(colors: [
-          //                             Color(0xffE67002),
-          //                             Color(0xff992002),
-          //                           ])
-          //                       ),
-          //                       child: Row(
-          //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                         children: [
-          //                           TextView(text: "Add to cart",fontSize: 10,color: Colors.white,fontWeight: FontWeight.w600,),Icon(Icons.add_shopping_cart,size: 14,color: Colors.white,)
-          //                         ],
-          //                       ),),
-          //                   ],
-          //                 ),
-          //               )
-          //             ],
-          //           ),
-          //         ]
-          //       ),
-          //     );
-          //   },
-          // ),
+              );
+            }
 
-          GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            children: [],
-          )
-        ],
+            if(state is ProductsloadingState){
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      2,
+                          (index) => Container(
+                        width: 140,
+                        height: 70,
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Pallets.grey95,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      2,
+                          (index) => Container(
+                        width: 140,
+                        height: 70,
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Pallets.grey95,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+            if (state is ProductsSuccessState) {
+              int calculateDiscountPercentage(String price, String discountPrice) {
+                final double originalPrice = double.tryParse(price) ?? 0;
+                final double discountedPrice = double.tryParse(discountPrice) ?? 0;
+                if (discountedPrice <= 0 || discountedPrice >= originalPrice) {
+                  return 0;
+                }
+                return ((1 - discountedPrice / originalPrice) * 100).round();
+              }
+
+              String formatNumberWithCommas(String number) {
+                try {
+                  final parsedNumber = double.parse(number.replaceAll(',', ''));
+                  return parsedNumber
+                      .toStringAsFixed(0)
+                      .replaceAllMapped(
+                    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                        (Match m) => '${m[1]},',
+                  );
+                } catch (e) {
+                  return number;
+                }
+              }
+
+              final flashProducts = state.response.data?.products?.where((product) {
+                final discountPercent = calculateDiscountPercentage(
+                  product.price.toString(),
+                  product.discountPrice.toString(),
+                );
+                return discountPercent >= 40;
+              }).toList();
+
+              if (flashProducts == null || flashProducts.isEmpty) {
+                return SizedBox();
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.all(10),
+                    color: Color(0xffd80d0d),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.flash_on_sharp, color: Colors.white),
+                            SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextView(
+                                  text: "Flash Sales",
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17,
+                                ),
+                                TextView(
+                                  text: "Buy at an affordable price",
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        TextView(
+                          text: "See All",
+                          color: Colors.white,
+                          onTap: (){
+                            context.pushNamed(PageUrl.weekly_offer);
+                          },
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    height: 220,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      itemCount: flashProducts.take(6).length,
+                      itemBuilder: (context, index) {
+                        final product = flashProducts[index];
+                        final discountPercent = calculateDiscountPercentage(
+                          product.price.toString(),
+                          product.discountPrice.toString(),
+                        );
+
+                        return Container(
+                          width: 160,
+                          margin: EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Pallets.grey95.withOpacity(0.3)),
+                            color: Colors.white,
+                          ),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Product Image
+                                  Container(
+                                    height: 120,
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      onTap: () {
+                                        context.pushNamed(
+                                          PageUrl.product_details,
+                                          queryParameters: {
+                                            PathParam.id: product.id.toString(),
+                                          },
+                                        );
+                                      },
+                                      child: Center(
+                                        child: IgnorePointer(
+                                          child: ImageWidget(
+                                            imageUrl: product.coverImage ?? '',
+                                            width: 120,
+                                            height: 120,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  // Product Details
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          onTap: () {
+                                            context.pushNamed(
+                                              PageUrl.product_details,
+                                              queryParameters: {
+                                                PathParam.id: product.id.toString(),
+                                              },
+                                            );
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
+                                                text: product.name ?? '',
+                                                maxLines: 1,
+                                                fontSize: 10,
+                                                textOverflow: TextOverflow.ellipsis,
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                "₦${formatNumberWithCommas(product.discountPrice.toString())}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              SizedBox(height: 2),
+                                              StockIndicator(
+                                                stockQuantity: product.stockQuantity,
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Discount Badge
+                              Positioned(
+                                top: -5,
+                                right: -5,
+                                child: Container(
+                                  height: 30,
+                                  width: 55,
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                    ),
+                                    color: Color(0xff3567a6),
+                                  ),
+                                  child: Center(
+                                    child: TextView(
+                                      text: "$discountPercent% OFF",
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }
+            return SizedBox();
+          },
+        ),
       ),
     );
   }
-}
 
+  void _listenToProductState(BuildContext context, ProductsState state) {
+    // if (state is ProductsloadingState) {
+    //   CustomDialogs.showLoading(context);
+    // }
+    // if (state is ProductsFailiureState) {
+    //   context.pop();
+    // }
+    // if (state is ProductsSuccessState) {
+    //   context.pop();
+    // }
+  }
+
+
+
+}

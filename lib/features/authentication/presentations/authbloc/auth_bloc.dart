@@ -8,6 +8,7 @@ import 'package:hezmart/features/authentication/domain/repo/authrepository.dart'
 import 'package:hezmart/features/authentication/domain/usecase/auth_success_usecase.dart';
 import 'package:logger/logger.dart';
 
+import '../../data/models/error_response.dart';
 import '../../data/models/forgot_password_res.dart';
 import '../../data/models/forgotpayload.dart';
 import '../../data/models/resendOtp.dart';
