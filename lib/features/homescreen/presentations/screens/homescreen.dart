@@ -194,56 +194,62 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               ),
                             ),
-                            Column(
-                              children: [
-                                10.verticalSpace,
-                                TextView(
-                                  text:
-                                      "Get Quality products at affordable prices",
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  align: TextAlign.center,
-                                ),
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  onTap: () {
-                                    context.pushNamed(PageUrl.shopsscreen);
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 50,
-                                    width: 200,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Color(0xffE67002),
-                                    ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                children: [
+                                  10.verticalSpace,
+                                  Center(
                                     child: TextView(
-                                      text: "Shop Now",
-                                      fontWeight: FontWeight.w600,
+                                      text:
+                                          "Get Quality products at affordable prices",
+                                      fontSize: 20,
                                       color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      align: TextAlign.center,
                                     ),
                                   ),
-                                ),
-                                // SizedBox(
-                                //   width: 200,
-                                //   height: 60,
-                                //   child: CustomButton(
-                                //     isExpanded: true,
-                                //     // padding: EdgeInsets.symmetric(horizontal: 20),
-                                //     onPressed: () {
-                                //       context.pushNamed(PageUrl.shopsscreen);
-                                //     },
-                                //     // bgColor: Color(0xffE67002),
-                                //     child: TextView(
-                                //       text: "Shop Now",
-                                //       fontWeight: FontWeight.w600,
-                                //       color: Colors.white,
-                                //     ),
-                                //   ),
-                                // ),
-                              ],
+                                  10.verticalSpace,
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    onTap: () {
+                                      context.pushNamed(PageUrl.shopsscreen);
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 50,
+                                      width: 200,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Color(0xffE67002),
+                                      ),
+                                      child: TextView(
+                                        text: "Shop Now",
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  // SizedBox(
+                                  //   width: 200,
+                                  //   height: 60,
+                                  //   child: CustomButton(
+                                  //     isExpanded: true,
+                                  //     // padding: EdgeInsets.symmetric(horizontal: 20),
+                                  //     onPressed: () {
+                                  //       context.pushNamed(PageUrl.shopsscreen);
+                                  //     },
+                                  //     // bgColor: Color(0xffE67002),
+                                  //     child: TextView(
+                                  //       text: "Shop Now",
+                                  //       fontWeight: FontWeight.w600,
+                                  //       color: Colors.white,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
                             ),
                             Positioned(
                               bottom: 10,
