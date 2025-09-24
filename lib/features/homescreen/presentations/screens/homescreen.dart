@@ -130,11 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 allResponse = state.response;
                 logger.w(state.response.data?.products.first.name ?? '');
                 final product = state.response.data?.products;
-                // final uniqueCategories = product!
-                //     .map((item) => item.category?.name)
-                //     .where((name) => name != null)
-                //     .toSet()
-                //     .toList();
+                final uniqueCategories = product!
+                    .map((item) => item.category?.name)
+                    .where((name) => name != null)
+                    .toSet()
+                    .toList();
                 final Map<String, List<Product>> productsByCategory = {};
 
                 for (var item in product!) {
@@ -503,100 +503,80 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         0.verticalSpace,
                         Column(
-                          children:
-                              productsByCategory.entries.map((entry) {
-                                final categoryName = entry.key;
-                                final categoryProducts = entry.value;
-                                final categoryId =
-                                    categoryProducts.first.category?.id
-                                        .toString() ??
-                                    '';
-                                return Column(
-                                  children: [
-                                    10.verticalSpace,
-                                    Container(
-                                      height: 60,
-                                      width: 1.sw,
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10,
-                                        horizontal: 15,
+                          children: uniqueCategories.map((categoryName) {
+                            final categoryProducts = productsByCategory[categoryName] ?? [];
+                            if (categoryProducts.length < 3) {
+                              return SizedBox.shrink();
+                            }
+                            return Column(
+                              children: [
+                                10.verticalSpace,
+                                Container(
+                                  height: 60,
+                                  width: 1.sw,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 15,
+                                  ),
+                                  color: Color(0xffE67002).withOpacity(0.8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      TextView(
+                                        text: categoryName ?? '',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      color: Color(0xffE67002).withOpacity(0.8),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextView(
-                                            text: categoryName,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          TextView(
-                                            onTap: () {
-                                              context.pushNamed(
-                                                PageUrl.see_all,
-                                                queryParameters: {
-                                                  PathParam.id: categoryId,
-                                                  PathParam.userName:
-                                                      categoryName,
-                                                },
-                                              );
+                                      TextView(
+                                        onTap: () {
+                                          context.pushNamed(
+                                            PageUrl.see_all,
+                                            queryParameters: {
+                                              PathParam.id: categoryName,
+                                              PathParam.userName: categoryName,
                                             },
-                                            text: 'See All',
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                          ),
-                                        ],
+                                          );
+                                        },
+                                        text: 'See All',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                10.verticalSpace,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  child: GridView(
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: .7,
                                     ),
-                                    10.verticalSpace,
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                      ),
-                                      child: GridView(
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              mainAxisSpacing: 10,
-                                              crossAxisSpacing: 10,
-                                              childAspectRatio: .7,
-                                            ),
-                                        padding: EdgeInsets.only(bottom: 10),
-                                        physics: NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        children: List.generate(categoryProducts.take(10).length, (
-                                          index,
-                                        ) {
-                                          final prod = categoryProducts[index];
-                                          int calculateDiscountPercentage(
-                                            String price,
-                                            String discountPrice,
-                                          )
-                                          {
-                                            final double originalPrice =
-                                                double.tryParse(price) ?? 0;
-                                            final double discountedPrice =
-                                                double.tryParse(
-                                                  discountPrice,
-                                                ) ??
-                                                0;
-                                            if (discountedPrice <= 0 ||
-                                                discountedPrice >=
-                                                    originalPrice)
-                                              return 0;
-                                            return ((1 -
-                                                        discountedPrice /
-                                                            originalPrice) *
-                                                    100)
-                                                .round();
-                                          }
+                                    padding: EdgeInsets.only(bottom: 10),
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
 
-                                          final productId = prod.id.toString();
-                                          final isLiked = likedProductIds
-                                              .contains(productId);
+                                  children: List.generate(categoryProducts.length, (index) {
+                                    final prod = categoryProducts[index];
+                                      int calculateDiscountPercentage(
+                                          String price,
+                                          String discountPrice,
+                                          ) {
+                                        final double originalPrice = double.tryParse(price) ?? 0;
+                                        final double discountedPrice =
+                                            double.tryParse(discountPrice) ?? 0;
+                                        if (discountedPrice <= 0 || discountedPrice >= originalPrice) {
+                                          return 0;
+                                        }
+                                        return ((1 - discountedPrice / originalPrice) * 100).round();
+                                      }
 
-                                          return Container(
+                                      final productId = prod.id.toString();
+                                      final isLiked = likedProductIds.contains(productId);
+
+                                      return Container(
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -1172,6 +1152,7 @@ class StockIndicator extends StatelessWidget {
 //   fontSize: 12,
 // ),
 // 20.verticalSpace,
+
 // Column(
 //   children: uniqueCategories.map((categoryName) => Column(
 //     children: [
@@ -1458,4 +1439,6 @@ class StockIndicator extends StatelessWidget {
 //       ),
 //     ],
 //   )).toList(),
+
+
 // ),

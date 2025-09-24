@@ -131,7 +131,7 @@ class _CategoriesState extends State<Categories> {
                                     horizontal: 10,
                                   ),
                                   child: TextView(
-                                    text: cat[selectedIndex].name.toString(),
+                                    text: cat[selectedIndex].id.toString(),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
