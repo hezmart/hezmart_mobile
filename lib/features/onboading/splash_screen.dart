@@ -43,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   // final userbloc = injector.get<UserBloc>();
+
   @override
   void dispose() {
     super.dispose();

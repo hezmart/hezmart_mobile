@@ -505,6 +505,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           children: uniqueCategories.map((categoryName) {
                             final categoryProducts = productsByCategory[categoryName] ?? [];
+                            // final categoryProducts = entry.value;
+                            final categoryId =
+                                categoryProducts.first.category?.id
+                                    .toString() ??
+                                    '';
                             if (categoryProducts.length < 3) {
                               return SizedBox.shrink();
                             }
@@ -532,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           context.pushNamed(
                                             PageUrl.see_all,
                                             queryParameters: {
-                                              PathParam.id: categoryName,
+                                              PathParam.id: categoryId,
                                               PathParam.userName: categoryName,
                                             },
                                           );
