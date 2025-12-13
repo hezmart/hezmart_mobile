@@ -133,44 +133,44 @@ class _SigninScreenState extends State<SigninScreen> {
 
 
                 40.verticalSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(width: 100, child: Divider()),
-                    10.horizontalSpace,
-                    TextView(text: "Or connect with"),
-                    10.horizontalSpace,
-
-                    SizedBox(width: 100, child: Divider()),
-                  ],
-                ),
-                40.verticalSpace,
-                BlocConsumer<AuthBloc, AuthState>(
-                  bloc: googleauth,
-                  listener: _listenToAuthGoogleState,
-                  builder: (context, state) {
-                    return CustomOutlinedButton(
-                      // borderRadius: BorderRadius.circular(25),
-                      radius: 10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ImageWidget(imageUrl: "assets/images/pngs/gg.png"),
-                          30.horizontalSpace,
-                          TextView(
-                            text: "Continue with Google",
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {
-                        googleAuth();
-                      },
-                    );
-                  },
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     SizedBox(width: 100, child: Divider()),
+                //     10.horizontalSpace,
+                //     TextView(text: "Or connect with"),
+                //     10.horizontalSpace,
+                //
+                //     SizedBox(width: 100, child: Divider()),
+                //   ],
+                // ),
+                // 40.verticalSpace,
+                // BlocConsumer<AuthBloc, AuthState>(
+                //   bloc: googleauth,
+                //   listener: _listenToAuthGoogleState,
+                //   builder: (context, state) {
+                //     return CustomOutlinedButton(
+                //       // borderRadius: BorderRadius.circular(25),
+                //       radius: 10,
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           ImageWidget(imageUrl: "assets/images/pngs/gg.png"),
+                //           30.horizontalSpace,
+                //           TextView(
+                //             text: "Continue with Google",
+                //             color: Colors.black,
+                //             fontWeight: FontWeight.w600,
+                //             fontSize: 14,
+                //           ),
+                //         ],
+                //       ),
+                //       onPressed: () {
+                //         googleAuth();
+                //       },
+                //     );
+                //   },
+                // ),
               ],
             ),
           ),

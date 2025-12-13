@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId = "com.hezmart.shoppingapp"
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = 16
         versionName = flutter.versionName
