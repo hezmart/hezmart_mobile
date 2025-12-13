@@ -142,4 +142,14 @@ static const crypto_price="https://api.coingecko.com/api/v3/coins/markets?vs_cur
 ///payorder
 static const paycrypto="https://api.hezmart.com/api/v1/orders/crypto-checkout";
 static const paytransfer="https://api.hezmart.com/api/v1/orders/checkout-session";
+
+
+
+///
+static const news="https://api.hezmart.com/api/v1/products?status=active&flashSale=true&page=1&limit=16";
+static const newss="https://api.hezmart.com/api/v1/products?status=active&sort=-viewsCount,-likesCount,-createdAt&limit=12";
+static const lastvied="https://api.hezmart.com/api/v1/recently-viewed";
+
+
+
 }
