@@ -146,9 +146,10 @@ static const paytransfer="https://api.hezmart.com/api/v1/orders/checkout-session
 
 
 ///
-static const news="https://api.hezmart.com/api/v1/products?status=active&flashSale=true&page=1&limit=16";
-static const newss="https://api.hezmart.com/api/v1/products?status=active&sort=-viewsCount,-likesCount,-createdAt&limit=12";
-static const lastvied="https://api.hezmart.com/api/v1/recently-viewed";
+static const hot_now="https://api.hezmart.com/api/v1/products?status=active&sort=-viewsCount,-likesCount,-createdAt&limit=12";
+
+static const flash_sales="https://api.hezmart.com/api/v1/products?status=active&flashSale=true&page=1&limit=16";
+static const last_viewed="https://api.hezmart.com/api/v1/recently-viewed";
 
 
 

@@ -2,6 +2,8 @@ import 'package:hezmart/core/services/network/network_service.dart';
 import 'package:hezmart/core/services/network/url_config.dart';
 import 'package:hezmart/features/homescreen/data/models/getall_products.dart';
 import 'package:hezmart/features/homescreen/data/models/getvendors.dart';
+import 'package:hezmart/features/homescreen/data/models/hot_response.dart';
+import 'package:hezmart/features/homescreen/data/models/last_viewed_response.dart';
 import 'package:hezmart/features/homescreen/data/models/singleproduct_response.dart';
 import 'package:hezmart/features/homescreen/data/models/vendor_products.dart';
 import 'package:hezmart/features/homescreen/domain/product_repo/product_repo.dart';
@@ -43,8 +45,26 @@ class ProductRepositoryImpl extends ProductRepository {
     var response = await networkService.call(
       UrlConfig.getvendorproducts,
       RequestMethod.get,
-      queryParams: {"userId":id}
+      queryParams: {"userId": id},
     );
     return VendorProductsResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<HotSalesResponse> getHotProduct() async {
+    var response = await networkService.call(
+      UrlConfig.hot_now,
+      RequestMethod.get,
+    );
+    return HotSalesResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<LastViewedResponse> last_viewd() async {
+    var response = await networkService.call(
+      UrlConfig.last_viewed,
+      RequestMethod.get,
+    );
+    return LastViewedResponse.fromJson(response.data);
   }
 }

@@ -44,3 +44,17 @@ class GetVendorsProductSuccessState extends ProductsState {
   @override
   List<Object> get props => [response];
 }
+class GetHotProductsSuccessState extends ProductsState {
+  HotSalesResponse response;
+  GetHotProductsSuccessState(this.response);
+  @override
+  List<Object> get props => [response];
+}
+class LastViewedProductsSuccessState extends ProductsState {
+  LastViewedResponse response;
+  LastViewedProductsSuccessState(this.response);
+  @override
+  List<Object> get props => [response];
+}
+
+

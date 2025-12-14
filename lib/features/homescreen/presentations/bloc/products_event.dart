@@ -8,11 +8,25 @@ class GetAllProductsEvent extends ProductsEvent {
   @override
   // TODO: implement props
   List<Object?> get props => [];
-}class GetAllVendorsEvent extends ProductsEvent {
+}
+
+class GetHotProductsEvent extends ProductsEvent {
   @override
   // TODO: implement props
   List<Object?> get props => [];
 }
+class LastViewedProductsEvent extends ProductsEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class GetAllVendorsEvent extends ProductsEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
 class SingleProductsEvent extends ProductsEvent {
   String id;
 
@@ -22,6 +36,7 @@ class SingleProductsEvent extends ProductsEvent {
   // TODO: implement props
   List<Object?> get props => [id];
 }
+
 class VendorProductsEvent extends ProductsEvent {
   String id;
 

@@ -1,35 +1,30 @@
-class HotSalesResponse {
-  HotSalesResponse({
+class LastViewedResponse {
+  LastViewedResponse({
     required this.status,
     required this.result,
-    required this.pagination,
     required this.data,
   });
 
   final String? status;
   final dynamic? result;
-  final Pagination? pagination;
   final Data? data;
 
-  HotSalesResponse copyWith({
+  LastViewedResponse copyWith({
     String? status,
-    dynamic? result,
-    Pagination? pagination,
+    num? result,
     Data? data,
   }) {
-    return HotSalesResponse(
+    return LastViewedResponse(
       status: status ?? this.status,
       result: result ?? this.result,
-      pagination: pagination ?? this.pagination,
       data: data ?? this.data,
     );
   }
 
-  factory HotSalesResponse.fromJson(Map<String, dynamic> json){
-    return HotSalesResponse(
+  factory LastViewedResponse.fromJson(Map<String, dynamic> json){
+    return LastViewedResponse(
       status: json["status"],
       result: json["result"],
-      pagination: json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]),
       data: json["data"] == null ? null : Data.fromJson(json["data"]),
     );
   }
@@ -37,13 +32,12 @@ class HotSalesResponse {
   Map<String, dynamic> toJson() => {
     "status": status,
     "result": result,
-    "pagination": pagination?.toJson(),
     "data": data?.toJson(),
   };
 
   @override
   String toString(){
-    return "$status, $result, $pagination, $data, ";
+    return "$status, $result, $data, ";
   }
 }
 
@@ -143,27 +137,27 @@ class Product {
     List<String>? images,
     List<dynamic>? shippingCountries,
     String? itemsLeftMessage,
-    dynamic? id,
+    int? id,
     String? name,
     String? description,
     String? price,
     String? discountPrice,
     String? weight,
-    dynamic? ratingsAverage,
-    dynamic? ratingsQuantity,
+    num? ratingsAverage,
+    num? ratingsQuantity,
     bool? isDigital,
     String? seoTitle,
     String? seoDescription,
     bool? taxable,
     String? coverImage,
-    dynamic? categoryId,
-    dynamic? subCategoryId,
-    dynamic? userId,
+    num? categoryId,
+    num? subCategoryId,
+    num? userId,
     String? status,
     String? slug,
-    dynamic? stockQuantity,
-    dynamic? likesCount,
-    dynamic? viewsCount,
+    num? stockQuantity,
+    num? likesCount,
+    num? viewsCount,
     DateTime? createdAt,
     DateTime? updatedAt,
     Category? category,
@@ -342,66 +336,5 @@ class User {
   @override
   String toString(){
     return "$businessName, $id, ";
-  }
-}
-
-class Pagination {
-  Pagination({
-    required this.totalItems,
-    required this.currentPage,
-    required this.totalPages,
-    required this.perPage,
-    required this.nextPage,
-    required this.prevPage,
-  });
-
-  final dynamic? totalItems;
-  final dynamic? currentPage;
-  final dynamic? totalPages;
-  final dynamic? perPage;
-  final String? nextPage;
-  final dynamic prevPage;
-
-  Pagination copyWith({
-    dynamic? totalItems,
-    dynamic? currentPage,
-    dynamic? totalPages,
-    dynamic? perPage,
-    String? nextPage,
-    dynamic? prevPage,
-  }) {
-    return Pagination(
-      totalItems: totalItems ?? this.totalItems,
-      currentPage: currentPage ?? this.currentPage,
-      totalPages: totalPages ?? this.totalPages,
-      perPage: perPage ?? this.perPage,
-      nextPage: nextPage ?? this.nextPage,
-      prevPage: prevPage ?? this.prevPage,
-    );
-  }
-
-  factory Pagination.fromJson(Map<String, dynamic> json){
-    return Pagination(
-      totalItems: json["totalItems"],
-      currentPage: json["currentPage"],
-      totalPages: json["totalPages"],
-      perPage: json["perPage"],
-      nextPage: json["nextPage"],
-      prevPage: json["prevPage"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "totalItems": totalItems,
-    "currentPage": currentPage,
-    "totalPages": totalPages,
-    "perPage": perPage,
-    "nextPage": nextPage,
-    "prevPage": prevPage,
-  };
-
-  @override
-  String toString(){
-    return "$totalItems, $currentPage, $totalPages, $perPage, $nextPage, $prevPage, ";
   }
 }

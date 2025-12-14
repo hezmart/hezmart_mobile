@@ -1,36 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hezmart/common/widgets/image_widget.dart';
+import 'package:hezmart/common/widgets/text_view.dart';
 import 'package:hezmart/core/navigation/route_url.dart';
-import 'package:linear_progress_bar/linear_progress_bar.dart';
-
+import 'package:hezmart/core/theme/pallets.dart';
 import '../../../../common/widgets/error_widget.dart';
-import '../../../../common/widgets/image_widget.dart';
-import '../../../../common/widgets/text_view.dart';
 import '../../../../core/navigation/path_params.dart';
 import '../../../../core/services/network/network_service.dart';
-import '../../../../core/theme/pallets.dart';
 import '../../data/data/product_repo_impl/product_repo_impl.dart';
 import '../bloc/products_bloc.dart';
 import '../screens/homescreen.dart';
-class Brandnew extends StatefulWidget {
-  const Brandnew({super.key});
 
+class LastViewed extends StatefulWidget {
+  const LastViewed({super.key});
   @override
-  State<Brandnew> createState() => _BrandnewState();
+  State<LastViewed> createState() => _LastViewedState();
 }
-
-class _BrandnewState extends State<Brandnew> {
+class _LastViewedState extends State<LastViewed> {
   final products = ProductsBloc(ProductRepositoryImpl(NetworkService()));
-
   @override
   void initState() {
-    products.add(GetHotProductsEvent());
+    products.add(LastViewedProductsEvent());
     super.initState();
   }
-  double _rating = 4.0;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -46,7 +40,7 @@ class _BrandnewState extends State<Brandnew> {
                 child: Center(
                   child: AppPromptWidget(
                     onTap: () {
-                      products.add(GetHotProductsEvent());
+                      products.add(LastViewedProductsEvent());
                     },
                   ),
                 ),
@@ -90,7 +84,7 @@ class _BrandnewState extends State<Brandnew> {
                 ],
               );
             }
-            if (state is GetHotProductsSuccessState) {
+            if (state is LastViewedProductsSuccessState) {
               int calculateDiscountPercentage(String price, String discountPrice) {
                 final double originalPrice = double.tryParse(price) ?? 0;
                 final double discountedPrice = double.tryParse(discountPrice) ?? 0;
@@ -99,7 +93,6 @@ class _BrandnewState extends State<Brandnew> {
                 }
                 return ((1 - discountedPrice / originalPrice) * 100).round();
               }
-
               String formatNumberWithCommas(String number) {
                 try {
                   final parsedNumber = double.parse(number.replaceAll(',', ''));
@@ -113,7 +106,6 @@ class _BrandnewState extends State<Brandnew> {
                   return number;
                 }
               }
-
 
               final flashProducts = state.response.data?.products;
 
@@ -139,13 +131,13 @@ class _BrandnewState extends State<Brandnew> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextView(
-                                  text: "Hot Sales",
+                                  text: "Last Viewed",
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 17,
                                 ),
                                 TextView(
-                                  text: "Buy at an affordable price",
+                                  text: "",
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 13,
@@ -154,15 +146,15 @@ class _BrandnewState extends State<Brandnew> {
                             ),
                           ],
                         ),
-                        // TextView(
-                        //   text: "See All",
-                        //   color: Colors.white,
-                        //   onTap: (){
-                        //     context.pushNamed(PageUrl.weekly_offer);
-                        //   },
-                        //   fontSize: 13,
-                        //   fontWeight: FontWeight.w500,
-                        // ),
+                        TextView(
+                          text: "See All",
+                          color: Colors.white,
+                          onTap: (){
+                            context.pushNamed(PageUrl.weekly_offer);
+                          },
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ],
                     ),
                   ),
@@ -172,7 +164,7 @@ class _BrandnewState extends State<Brandnew> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      itemCount: flashProducts.length,
+                      itemCount: flashProducts.take(6).length,
                       itemBuilder: (context, index) {
                         final product = flashProducts[index];
                         final discountPercent = calculateDiscountPercentage(

@@ -16,6 +16,7 @@ import 'package:hezmart/core/utils/theme/app_colors.dart';
 import 'package:hezmart/features/homescreen/data/data/product_repo_impl/product_repo_impl.dart';
 import 'package:hezmart/features/homescreen/presentations/bloc/products_bloc.dart';
 import 'package:hezmart/features/homescreen/presentations/widgets/flash_sales.dart';
+import 'package:hezmart/features/homescreen/presentations/widgets/last_viewed.dart';
 import 'package:hezmart/features/homescreen/presentations/widgets/weekly_offer.dart';
 import 'package:hezmart/features/wishlist/data/data/repossitory_impl/repossitory_impl.dart';
 import 'package:hezmart/features/wishlist/presentations/fav_bloc/favourite_bloc.dart';
@@ -491,13 +492,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
 
                         SizedBox(
-
                           child: FlashSales(),
                         ),
-                        Container(
-                          height: 10,
-                          width: 1.sw,
-                          color: Colors.purple.withOpacity(0.4),
+
+                        // SizedBox(
+                        //   child: FlashSales(),
+                        // ),
+
+
+
+                        // Container(
+                        //   height: 10,
+                        //   width: 1.sw,
+                        //   color: Colors.purple.withOpacity(0.4),
+                        // ),
+                        SizedBox(
+                          child: Brandnew(),
+                        ),
+                        SizedBox(
+                          child: LastViewed(),
                         ),
                         // 10.verticalSpace,
 

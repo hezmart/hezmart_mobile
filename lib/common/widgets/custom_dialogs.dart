@@ -38,7 +38,7 @@ class CustomDialogs {
           children: [
             TextView(text: "Logging Out....",fontSize: 15,fontWeight: FontWeight.w600,),
             10.verticalSpace,
-            SpinKitCubeGrid(
+            SpinKitCircle(
               color:Color(0xffE67002).withOpacity(0.6),
               size: 30.0,
             ),
@@ -46,7 +46,6 @@ class CustomDialogs {
         ),
       ),
     );
-
     await showDialog(
       context: context,
       useRootNavigator: useRootNavigator!,
@@ -71,7 +70,7 @@ class CustomDialogs {
       elevation: 0,
       // child: PulsatingImage(),
 
-      child:  SpinKitCubeGrid(
+      child:  SpinKitCircle(
         color:Color(0xffE67002).withOpacity(0.6),
         size: 50.0,
       ),

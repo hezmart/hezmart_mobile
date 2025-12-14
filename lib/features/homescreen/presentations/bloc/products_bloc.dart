@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hezmart/features/homescreen/data/models/getall_products.dart';
+import 'package:hezmart/features/homescreen/data/models/last_viewed_response.dart';
 import 'package:hezmart/features/homescreen/data/models/singleproduct_response.dart';
 import 'package:hezmart/features/homescreen/domain/product_repo/product_repo.dart';
 
 import '../../../../core/di/injector.dart';
 import '../../../cart/presentations/cartbloc/cart_bloc.dart';
 import '../../data/models/getvendors.dart';
+import '../../data/models/hot_response.dart';
 import '../../data/models/vendor_products.dart';
 
 part 'products_event.dart';
@@ -23,8 +25,10 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
 
     on<GetAllProductsEvent>(_mapGetAllProductsEventToState);
     on<SingleProductsEvent>(_mapSingleProductsEventToState);
+    on<LastViewedProductsEvent>(_mapLastViewedProductsEventToState);
     on<GetAllVendorsEvent>(_mapGetAllVendorsEventToState);
     on<VendorProductsEvent>(_mapVendorProductsEventToState);
+    on<GetHotProductsEvent>(_mapGetHotProductsEventToState);
   }
 
   Future<void> _mapGetAllProductsEventToState(
@@ -59,30 +63,64 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     }
   }
 
-  Future<void> _mapGetAllVendorsEventToState(GetAllVendorsEvent event, Emitter<ProductsState> emit) async {
+  Future<void> _mapGetAllVendorsEventToState(
+    GetAllVendorsEvent event,
+    Emitter<ProductsState> emit,
+  ) async {
     emit(ProductsloadingState());
     try {
-      var response=await repository.getvendors();
+      var response = await repository.getvendors();
       emit(GetVendorsSuccessState(response));
-    }  catch (e) {
+    } catch (e) {
       emit(ProductsFailiureState(e.toString()));
       // TODO
     }
-
   }
 
-  Future<void> _mapVendorProductsEventToState(VendorProductsEvent event, Emitter<ProductsState> emit) async {
+  Future<void> _mapVendorProductsEventToState(
+    VendorProductsEvent event,
+    Emitter<ProductsState> emit,
+  ) async {
     emit(ProductsloadingState());
     try {
-      var response=await repository.vendorsproduct(event.id);
+      var response = await repository.vendorsproduct(event.id);
       emit(GetVendorsProductSuccessState(response));
-    }  catch (e) {
+    } catch (e) {
       emit(ProductsFailiureState(e.toString()));
 
       // TODO
     }
+  }
+
+  Future<void> _mapGetHotProductsEventToState(
+    GetHotProductsEvent event,
+    Emitter<ProductsState> emit,
+  ) async {
+    emit(ProductsloadingState());
+    try {
+      var response=await repository.getHotProduct();
+      emit(GetHotProductsSuccessState(response));
+    } catch (e) {
+      emit(ProductsFailiureState(e.toString()));
+      rethrow;
+      // TODO
+    }
+  }
+
+  Future<void> _mapLastViewedProductsEventToState(LastViewedProductsEvent event, Emitter<ProductsState> emit) async {
+    emit(ProductsloadingState());
+    try {
+      var response=await repository.last_viewd();
+      emit(LastViewedProductsSuccessState(response));
+    } catch (e) {
+      emit(ProductsFailiureState(e.toString()));
+      rethrow;
+      // TODO
+    }
+
   }
 }
+
 //
 //
 //
