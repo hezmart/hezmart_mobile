@@ -339,17 +339,14 @@ class CustomDialogs {
       context.pop();
     }
 
-    // } else {
-    // Future.delayed(const Duration.zero ,() {})
-    //     .then((value) => Navigator.of(context).pop());
-    // }
+
   }
 
   static Widget getLoading({double size = 10.0}) => Container(
         alignment: Alignment.center,
         color: Colors.transparent,
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: SpinKitCubeGrid(
+        child: SpinKitCircle(
           color:Color(0xffE67002).withOpacity(0.6),
           size: 50.0,
         ),

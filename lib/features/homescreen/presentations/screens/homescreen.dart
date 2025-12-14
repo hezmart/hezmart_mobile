@@ -494,18 +494,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(
                           child: FlashSales(),
                         ),
-
-                        // SizedBox(
-                        //   child: FlashSales(),
-                        // ),
-
-
-
-                        // Container(
-                        //   height: 10,
-                        //   width: 1.sw,
-                        //   color: Colors.purple.withOpacity(0.4),
-                        // ),
                         SizedBox(
                           child: Brandnew(),
                         ),
@@ -523,7 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 categoryProducts.first.category?.id
                                     .toString() ??
                                     '';
-                            if (categoryProducts.length < 3) {
+                            if (categoryProducts.length < 4) {
                               return SizedBox.shrink();
                             }
                             return Column(
@@ -557,7 +545,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         },
                                         text: 'See All',
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontSize: 14,
                                       ),
                                     ],
                                   ),

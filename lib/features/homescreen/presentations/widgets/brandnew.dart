@@ -59,9 +59,9 @@ class _BrandnewState extends State<Brandnew> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(
-                      2,
+                      3,
                           (index) => Container(
-                        width: 140,
+                        width: 70,
                         height: 70,
                         margin: EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -75,9 +75,9 @@ class _BrandnewState extends State<Brandnew> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(
-                      2,
+                      3,
                           (index) => Container(
-                        width: 140,
+                        width: 70,
                         height: 70,
                         margin: EdgeInsets.all(8),
                         decoration: BoxDecoration(

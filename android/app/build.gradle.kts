@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.hezmart.shoppingapp"
+    namespace = "com.hezmart.app"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
@@ -29,11 +29,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.hezmart.shoppingapp"
+        applicationId = "com.hezmart.app"
         minSdk = flutter.minSdkVersion
         targetSdk = 35
-        versionCode = 16
-        versionName = flutter.versionName
+        versionCode = 17
+        versionName = "1.0.1"
         multiDexEnabled = true
     }
 

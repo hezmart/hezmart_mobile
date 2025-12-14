@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -30,13 +32,44 @@ class _FlashSalesState extends State<FlashSales> {
   @override
   void initState() {
     products.add(GetAllProductsEvent());
+    _startTimer();
     super.initState();
   }
+  late Timer _timer;
+  Duration _remainingTime =
+  const Duration(days: 30, hours: 20, minutes: 11, seconds: 14);
 
-  double _rating = 4.0;
+  final Duration _initialDuration =
+  const Duration(days: 30, hours: 20, minutes: 11, seconds: 14);
+  // Duration _remainingTime = const Duration(hours: 5, minutes: 2, seconds: 7);
+  // final Duration _initialDuration =
+  // const Duration(hours: 5, minutes: 2, seconds: 7);
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime.inSeconds > 0) {
+          _remainingTime -= const Duration(seconds: 1);
+        } else {
+          _remainingTime = _initialDuration;
+        }
+      });
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    String _formatDuration(Duration duration) {
+      final days = duration.inDays;
+      final hours = duration.inHours.remainder(24);
+      final minutes = duration.inMinutes.remainder(60);
+      final seconds = duration.inSeconds.remainder(60);
+
+      return "${days}d : ${hours}h : ${minutes}m : ${seconds}s";
+    }
+
     return SizedBox(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 20),
@@ -63,9 +96,9 @@ class _FlashSalesState extends State<FlashSales> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(
-                      2,
+                      3,
                           (index) => Container(
-                        width: 140,
+                        width: 70,
                         height: 70,
                         margin: EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -79,9 +112,9 @@ class _FlashSalesState extends State<FlashSales> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(
-                      2,
+                      3,
                           (index) => Container(
-                        width: 140,
+                        width: 70,
                         height: 70,
                         margin: EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -144,24 +177,27 @@ class _FlashSalesState extends State<FlashSales> {
                           children: [
                             Icon(Icons.flash_on_sharp, color: Colors.white),
                             SizedBox(width: 8),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextView(
-                                  text: "Flash Sales",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 17,
-                                ),
-                                TextView(
-                                  text: "Buy at an affordable price",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
-                                ),
-                              ],
+                            TextView(
+                              text: "Flash Sales",
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 17,
                             ),
                           ],
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
+                            // color: Pallets.successGreen,
+                          ),
+                          child: TextView(
+                            text: _formatDuration(_remainingTime),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
                         ),
                         TextView(
                           text: "See All",

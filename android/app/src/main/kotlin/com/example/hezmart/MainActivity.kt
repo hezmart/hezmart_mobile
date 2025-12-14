@@ -1,4 +1,4 @@
-package com.hezmart.shoppingapp
+package com.hezmart.app
 
 import io.flutter.embedding.android.FlutterActivity
 
