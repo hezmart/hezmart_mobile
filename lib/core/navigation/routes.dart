@@ -196,7 +196,8 @@ class CustomRoutes {
       ),      GoRoute(
         path: '/cash_success_order',
         name: PageUrl.cash_success_order,
-        builder: (context, state) =>  BlocProvider.value(value: success,
+        builder: (context, state) =>  BlocProvider.value(
+            value: cartcheckout,
         child: CashSuccessOrder(ref: (state.extra as CashSuccessOrderParams).ref, url: (state.extra as CashSuccessOrderParams).url)),
       ),   GoRoute(
         path: '/description_details',

@@ -11,6 +11,7 @@ import '../../../../common/widgets/image_widget.dart';
 import '../../../../common/widgets/text_view.dart';
 import '../../../../core/navigation/route_url.dart';
 import '../../../../core/services/network/network_service.dart';
+import '../../../../core/theme/pallets.dart';
 import '../../../../core/utils/helper_utils.dart';
 import '../../data/data/cart_repo_impl.dart';
 import '../cartbloc/cart_bloc.dart';
@@ -34,12 +35,13 @@ class CashSuccessOrder extends StatefulWidget {
 
 class _CashSuccessOrderState extends State<CashSuccessOrder> with WidgetsBindingObserver {
   final bloc = CartBloc(CartRepositoryImpl(NetworkService()));
+  final cart = CartBloc(CartRepositoryImpl(NetworkService()));
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    bloc.add(GetPaymentRefEvent(widget.ref));
+    context.read<CartBloc>().add(GetCartEvent());
   }
 
   @override
@@ -51,64 +53,67 @@ class _CashSuccessOrderState extends State<CashSuccessOrder> with WidgetsBinding
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      bloc.add(GetPaymentRefEvent(widget.ref));
+      context.read<CartBloc>().add(GetCartEvent());
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<CartBloc, CartState>(
-        bloc: bloc,
-  listener: _listenToReferenceState,
-  builder: (context, state) {
-          if(state is CartfailiureState){
-            return Center(child:Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(child: IgnorePointer(child: ImageWidget(imageUrl: "assets/images/pngs/failed.png",size: 100,))),
-                  20.verticalSpace,
-                  TextView(text: "Payment Unsuccessful",fontSize: 16,color: Colors.red,fontWeight: FontWeight.w500,),
-                  TextView(text: "Your order was not placed successful",fontSize: 12,align: TextAlign.center,),
+      body: Center(
+        child: SingleChildScrollView(
+          child: BlocConsumer<CartBloc, CartState>(
+            listener: _listenToCartState,
+            builder: (context, state) {
+              if (state is CartloadingState) {
+                return Center(
+                  child: SizedBox(
+                    height: 1.sh,
+                    width: 1.sw,
+                    child: Center(child: CustomDialogs.getLoading(size: 30)),
+                  ),
+                );
+              }
+              if(state is CartfailiureState){
+                return Center(child:Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(child: IgnorePointer(child: ImageWidget(imageUrl: "assets/images/pngs/failed.png",size: 100,))),
+                      20.verticalSpace,
+                      TextView(text: "Payment Unsuccessful",fontSize: 16,color: Colors.red,fontWeight: FontWeight.w500,),
+                      TextView(text: "Your order was not placed successful",fontSize: 12,align: TextAlign.center,),
 
-                  20.verticalSpace,
-                  TextView(text: "Retry Payment",fontSize: 14,fontWeight:FontWeight.w600,align: TextAlign.center,color: Color(0xff0ffE67002),onTap: (){
-                    Helpers.launchRawUrl(widget.url?? '');
-                  },),
-                  30.verticalSpace,
-                  CustomButton(child: TextView(text: "Continue Shopping",fontSize: 16,fontWeight: FontWeight.w600,color: Colors.white,), onPressed: (){
-                    context.goNamed(PageUrl.home);
+                      30.verticalSpace,
+                      CustomButton(child: TextView(text: "Continue Shopping",fontSize: 16,fontWeight: FontWeight.w600,color: Colors.white,), onPressed: (){
+                        context.goNamed(PageUrl.home);
 
-                  }),
-                  20.verticalSpace,
-                  TextView(text: "Refresh Page",fontSize: 14,fontWeight:FontWeight.w600,align: TextAlign.center,color: Color(0xff0ffE67002),onTap: (){
-                    bloc.add(GetPaymentRefEvent(widget.ref));
+                      }),
+                      20.verticalSpace,
+                      TextView(text: "Go back",fontSize: 14,fontWeight:FontWeight.w600,align: TextAlign.center,color: Color(0xff0ffE67002),onTap: (){
+                   context.pop();
 
-                  },),
-                ],
-              ),
-            ),);
-          }
-          if(state is PaymentRefSuccessState){
-            return Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // 40.verticalSpace,
-                  // Row(
-                  //   children: [
-                  //     GestureDetector(
-                  //       onTap: (){
-                  //         context.goNamed(PageUrl.home);
-                  //       },
-                  //         child: Icon(Iconsax.arrow_left,size: 18,))
-                  //   ],
-                  // ),
-                  // 80.verticalSpace,
-                  state.response.status=="success"?Column(
+                      },),
+                    ],
+                  ),
+                ),);
+              }
+              if (state is GetCartSuccessState) {
+
+                String formatNumberWithCommas(String number) {
+                  try {
+                    final parsedNumber = double.parse(number.replaceAll(',', ''));
+                    return parsedNumber.toStringAsFixed(0).replaceAllMapped(
+                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                          (Match m) => '${m[1]},',
+                    );
+                  } catch (e) {
+                    return number;
+                  }
+                }
+                final cartitems = state.response.data?.items ?? [];
+                if (cartitems.isEmpty) {
+                 return Column(
                     children: [
                       Center(child: IgnorePointer(child: ImageWidget(imageUrl: "assets/images/pngs/success.png",size: 200,))),
                       10.verticalSpace,
@@ -119,43 +124,49 @@ class _CashSuccessOrderState extends State<CashSuccessOrder> with WidgetsBinding
                         context.goNamed(PageUrl.profile);
                       },),
                     ],
-                  ):
-                  Column(
+                  );
+                }
+                return  Center(child:Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(child: IgnorePointer(child: ImageWidget(imageUrl: "assets/images/pngs/failed.png",size: 200,))),
-                      10.verticalSpace,
+                      Center(child: IgnorePointer(child: ImageWidget(imageUrl: "assets/images/pngs/failed.png",size: 100,))),
+                      20.verticalSpace,
                       TextView(text: "Payment Unsuccessful",fontSize: 16,color: Colors.red,fontWeight: FontWeight.w500,),
                       TextView(text: "Your order was not placed successful",fontSize: 12,align: TextAlign.center,),
-                      5.verticalSpace,
-                      TextView(text: "Retry Payment",fontSize: 14,fontWeight:FontWeight.w600,align: TextAlign.center,color: Color(0xff0ffE67002),onTap: (){},),
+
+                      30.verticalSpace,
+                      CustomButton(child: TextView(text: "Continue Shopping",fontSize: 16,fontWeight: FontWeight.w600,color: Colors.white,), onPressed: (){
+                        context.goNamed(PageUrl.home);
+
+                      }),
+                      20.verticalSpace,
+                      TextView(text: "Go back",fontSize: 14,fontWeight:FontWeight.w600,align: TextAlign.center,color: Color(0xff0ffE67002),onTap: (){
+                        context.pop();
+
+                      },),
                     ],
                   ),
-                  30.verticalSpace,
-                  CustomButton(child: TextView(text: "Continue Shopping",fontSize: 16,fontWeight: FontWeight.w600,color: Colors.white,), onPressed: (){
-                    context.goNamed(PageUrl.home);
-
-                  })
-
-
-                ],
-              ),
-            );
-          }
-    return SizedBox();
-  },
-),
+                ),);
+              }
+              return SizedBox();
+            },
+          ),
+        ),
+      ),
     );
   }
 
-  void _listenToReferenceState(BuildContext context, CartState state) {
-    if(state is CartloadingState){
-      CustomDialogs.showLoading(context);
+  void _listenToCartState(BuildContext context, CartState state) {
+    if (state is CartloadingState) {
+      // CustomDialogs.showLoading(context);
     }
-    if(state is CartfailiureState){
-      context.pop();
+    if (state is CartfailiureState) {
+      // context.pop();
     }
-    if(state is PaymentRefSuccessState){
-      context.pop();
+    if (state is GetCartSuccessState) {
+      // context.pop();
     }
   }
 }
