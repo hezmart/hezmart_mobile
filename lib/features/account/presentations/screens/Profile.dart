@@ -9,12 +9,17 @@ import 'package:hezmart/common/widgets/text_view.dart';
 import 'package:hezmart/core/di/injector.dart';
 import 'package:hezmart/core/navigation/route_url.dart';
 import 'package:hezmart/core/services/network/network_service.dart';
+import 'package:hezmart/core/theme/pallets.dart';
+import 'package:hezmart/features/account/data/models/referal_payload.dart';
+import 'package:hezmart/features/account/data/repo_impl/profile_repo_impl.dart';
+import 'package:hezmart/features/account/presentations/profile/profile_bloc.dart';
 import 'package:hezmart/features/authentication/data/data/repo_impl/authrepositoryimpl.dart';
 import 'package:hezmart/features/authentication/presentations/authbloc/auth_bloc.dart';
 import 'package:hezmart/features/authentication/presentations/user_bloc/user_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../common/widgets/error_widget.dart';
+import '../../../../common/widgets/filled_textfield.dart';
 import '../../../../common/widgets/info_dialog.dart';
 import '../../../../core/services/data/session_manager.dart';
 import '../../../../core/utils/helper_utils.dart';
@@ -256,6 +261,17 @@ class _ProfileState extends State<Profile> {
                             text: 'My Profile',
                             ontap: () {
                               context.pushNamed(PageUrl.my_profile);
+                            },
+                          ),
+                          ProfileItem(
+                            widget: Icon(Icons.telegram_outlined,color: Pallets.grey60, size: 17),
+                            text: 'Refer And Earn',
+                            ontap: () {
+                              CustomDialogs.showCustomDialog(ReferalContainer(), context);
+                              // Helpers.launchRawUrl(
+                              //   'https://hezmart.com/sell-on-hezmart',
+                              // );
+                              // context.pushNamed(PageUrl.my_orders);
                             },
                           ),
                           ProfileItem(
@@ -622,5 +638,130 @@ class _ProfileItemState extends State<ProfileItem> {
         ),
       ),
     );
+  }
+}
+
+class ReferalContainer extends StatefulWidget {
+  const ReferalContainer({super.key});
+
+  @override
+  State<ReferalContainer> createState() => _ReferalContainerState();
+}
+
+class _ReferalContainerState extends State<ReferalContainer> {
+
+  final motiveController=TextEditingController();
+  final referkey=GlobalKey<FormState>();
+  final referbloc=ProfileBloc(ProfileRepositoryImpl(NetworkService()));
+
+  @override
+  Widget build(BuildContext context) {
+    return  Container(
+      padding: EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+
+      ),
+      child: Form(
+        key: referkey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                2.horizontalSpace,
+
+                InkWell(
+                  onTap: (){
+                    context.pop(
+
+                    );
+                  },
+                    child: Icon(Icons.cancel_rounded))
+              ],
+            ),
+            Center(child: TextView(text: "Refer And Earn",fontSize: 16,fontWeight: FontWeight.w500,)),
+            10.verticalSpace,
+            TextView(text: "Earn rewards for every friend who buys after your referral",fontSize: 12,align: TextAlign.center,)
+        ,20.verticalSpace,
+        TextView(text: "Your Motive"),
+            5.verticalSpace,
+            FilledTextField(
+              controller: motiveController,
+              fillColor: Colors.white,
+              maxLine: 3,
+              hint: "Tell us why you want to refer....",
+            ),
+
+            10.verticalSpace,
+
+            BlocConsumer<ProfileBloc, ProfileState>(
+              bloc: referbloc,
+  listener: _listenToProfileState,
+  builder: (context, state) {
+    return Column(
+      children: [
+        state is ProfileloadingState?SizedBox(): 10.verticalSpace,
+        state is ProfilefailiureState?Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.redAccent
+          ),
+            child: TextView(fontSize: 10,color: Colors.white,fontWeight: FontWeight.w500,text:state is ProfilefailiureState?state.error:"" )):SizedBox(),
+        state is ProfileloadingState?SizedBox(): 10.verticalSpace,
+        state is ReferSuccessState?Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Pallets.mildBlue
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(width: 200,
+                    child: TextView(fontSize: 10,color: Colors.white,fontWeight: FontWeight.w500,text:state is ReferSuccessState?"":"" )),
+                TextView(text: "Copy",fontSize: 12,fontWeight: FontWeight.w500,onTap: (){},)
+              ],
+            )):SizedBox(),
+        state is ProfileloadingState?SizedBox(): 10.verticalSpace,
+        CustomButton(child:state is ProfileloadingState?TextView(text: "Getting referral link",color: Colors.white,fontWeight: FontWeight.w500,fontSize: 15,): TextView(text: "Get Referral Code",color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500,), onPressed: (){
+                  getCode();
+                }),
+
+
+      ],
+    );
+  },
+)
+
+          ],
+        ),
+      ),
+    );
+  }
+
+  void getCode() {
+    if(referkey.currentState!.validate()){
+referbloc.add(ReferEvent(ReferalPaayload(name: "name", motive: motiveController.text.trim().toString())));
+    }
+  }
+
+  void _listenToProfileState(BuildContext context, ProfileState state) {
+    if(state is ProfileloadingState){
+      CustomDialogs.showLoading(context);
+    }
+    if(state is ProfilefailiureState) {
+      context.pop(
+      );
+    }
+      if(state is ReferSuccessState){
+        context.pop();
+      }
+
+
   }
 }

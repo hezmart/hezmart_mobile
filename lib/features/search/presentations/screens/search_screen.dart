@@ -130,14 +130,23 @@ class _SearchScreenState extends State<SearchScreen> {
                               final subCat = suggestions[index];
                               return GestureDetector(
                                 onTap: () {
-                                  context.pushNamed(
-                                    PageUrl.getsubcatss,
-                                    extra: SubCatParams(
-                                      subCat.categoryId.toString(),
-                                      subCat.id.toString(),
-                                      subCat.name.toString(),
-                                    ),
-                                  );
+                                  logger.w(subCat.categoryId.toString());
+                                  logger.w(subCat.name.toString(),);
+                                  logger.w(subCat.id.toString(),);
+                                  print(subCat.id.toString(),);
+                                  print(subCat.categoryId.toString());
+
+                                  context.pushNamed(PageUrl.getsubcatss,
+                                  extra: SubCatParams(subCat.categoryId.toString(),subCat.id.toString(), subCat.name.toString(),));
+                                  // context.pushNamed(
+                                  //
+                                  //   PageUrl.getsubcatss,
+                                  //   extra: SubCatParams(
+                                  //     subCat.categoryId.toString(),
+                                  //     subCat.id.toString(),
+                                  //     subCat.name.toString(),
+                                  //   ),
+                                  // );
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

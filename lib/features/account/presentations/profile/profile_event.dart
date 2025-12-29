@@ -23,3 +23,15 @@ class EditprofileEvent extends ProfileEvent {
   // TODO: implement props
   List<Object?> get props => [];
 }
+
+
+class ReferEvent extends ProfileEvent {
+  ReferalPaayload paayload;
+
+  ReferEvent(this.paayload);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [paayload];
+
+}

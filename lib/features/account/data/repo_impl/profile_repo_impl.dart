@@ -1,5 +1,6 @@
 import 'package:hezmart/core/services/network/network_service.dart';
 import 'package:hezmart/core/services/network/url_config.dart';
+import 'package:hezmart/features/account/data/models/referal_payload.dart';
 import 'package:hezmart/features/account/domain/repo/profile_repo.dart';
 
 import '../models/edit_pro_response.dart';
@@ -14,8 +15,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
     String number,
     String address,
     String state,
-  ) async
-  {
+  ) async {
     var response = await networkService.call(
       UrlConfig.editprofile,
       RequestMethod.patch,
@@ -27,12 +27,25 @@ class ProfileRepositoryImpl extends ProfileRepository {
         "state": state,
       },
     );
-    return EditprofileResponse.fromJson(response.data) ;
+    return EditprofileResponse.fromJson(response.data);
   }
 
   @override
   Future<EditprofileResponse> profile() async {
-    var response=await networkService.call(UrlConfig.profile, RequestMethod.get);
+    var response = await networkService.call(
+      UrlConfig.profile,
+      RequestMethod.get,
+    );
     return EditprofileResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<void> refer(ReferalPaayload payload) async {
+    var respose = await networkService.call(
+      UrlConfig.refer,
+      RequestMethod.post,
+      data: payload.toJson(),
+    );
+    return respose.data;
   }
 }

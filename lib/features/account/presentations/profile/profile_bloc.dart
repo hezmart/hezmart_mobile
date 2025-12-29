@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hezmart/features/account/data/models/referal_payload.dart';
 import 'package:hezmart/features/account/domain/repo/profile_repo.dart';
 import 'package:hezmart/features/authentication/data/models/authsuccess_response.dart';
 
@@ -21,6 +22,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     on<EditprofileEvent>(_mapEditprofileEventToState);
     on<GetProfileEvent>(_mapGetProfileEventToState);
+    on<ReferEvent>(_mapReferEventToState);
   }
 
   Future<void> _mapEditprofileEventToState(
@@ -72,6 +74,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }  catch (e) {
         emit(ProfilefailiureState(e.toString()));
         rethrow;
-        // TODO
+
     }}
+
+  Future<void> _mapReferEventToState(ReferEvent event, Emitter<ProfileState> emit
+      ) async {
+    emit(ProfileloadingState());
+    try {
+      var response=await repository.refer(event.paayload);
+      emit(ReferSuccessState());
+    }  catch (e) {
+      emit(ProfilefailiureState(e.toString()));
+      rethrow;
+    }
+  }
 }

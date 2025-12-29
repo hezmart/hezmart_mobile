@@ -29,4 +29,10 @@ abstract class ProfileState extends Equatable {
   List<Object> get props => [];
 }
 
+class ReferSuccessState extends ProfileState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
 

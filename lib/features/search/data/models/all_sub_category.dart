@@ -77,37 +77,33 @@ class Subcategory {
     required this.id,
     required this.name,
     required this.description,
-    required this.subcategoryCategoryId,
+    required this.categoryId,
     required this.createdAt,
     required this.updatedAt,
-    required this.categoryId,
   });
 
   final dynamic? id;
   final String? name;
   final dynamic description;
-  final dynamic? subcategoryCategoryId;
+  final dynamic? categoryId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final dynamic? categoryId;
 
   Subcategory copyWith({
     dynamic? id,
     String? name,
     dynamic? description,
-    dynamic? subcategoryCategoryId,
+    dynamic? categoryId,
     DateTime? createdAt,
     DateTime? updatedAt,
-    int? categoryId,
   }) {
     return Subcategory(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
-      subcategoryCategoryId: subcategoryCategoryId ?? this.subcategoryCategoryId,
+      categoryId: categoryId ?? this.categoryId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      categoryId: categoryId ?? this.categoryId,
     );
   }
 
@@ -116,10 +112,9 @@ class Subcategory {
       id: json["id"],
       name: json["name"],
       description: json["description"],
-      subcategoryCategoryId: json["categoryId"],
+      categoryId: json["categoryId"],
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
-      categoryId: json["CategoryId"],
     );
   }
 
@@ -127,14 +122,13 @@ class Subcategory {
     "id": id,
     "name": name,
     "description": description,
-    "categoryId": subcategoryCategoryId,
+    "categoryId": categoryId,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
-    "CategoryId": categoryId,
   };
 
   @override
   String toString(){
-    return "$id, $name, $description, $subcategoryCategoryId, $createdAt, $updatedAt, $categoryId, ";
+    return "$id, $name, $description, $categoryId, $createdAt, $updatedAt, ";
   }
 }
