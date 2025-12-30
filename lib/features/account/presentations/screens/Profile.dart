@@ -264,10 +264,17 @@ class _ProfileState extends State<Profile> {
                             },
                           ),
                           ProfileItem(
-                            widget: Icon(Icons.telegram_outlined,color: Pallets.grey60, size: 17),
+                            widget: Icon(
+                              Icons.telegram_outlined,
+                              color: Pallets.grey60,
+                              size: 17,
+                            ),
                             text: 'Refer And Earn',
                             ontap: () {
-                              CustomDialogs.showCustomDialog(ReferalContainer(), context);
+                              CustomDialogs.showCustomDialog(
+                                ReferalContainer(),
+                                context,
+                              );
                               // Helpers.launchRawUrl(
                               //   'https://hezmart.com/sell-on-hezmart',
                               // );
@@ -300,13 +307,15 @@ class _ProfileState extends State<Profile> {
                             },
                           ),
 
-                          appUser.role=="vendor"?SizedBox():  ProfileItem(
-                            widget: Icon(Iconsax.shopping_bag, size: 17),
-                            text: 'My Orders',
-                            ontap: () {
-                              context.pushNamed(PageUrl.my_orders);
-                            },
-                          ),
+                          appUser.role == "vendor"
+                              ? SizedBox()
+                              : ProfileItem(
+                                widget: Icon(Iconsax.shopping_bag, size: 17),
+                                text: 'My Orders',
+                                ontap: () {
+                                  context.pushNamed(PageUrl.my_orders);
+                                },
+                              ),
                           ProfileItem(
                             widget: Icon(Iconsax.people, size: 17),
                             text: 'View Sellers',
@@ -417,11 +426,16 @@ class _ProfileState extends State<Profile> {
                   ProfileItem(
                     widget: Icon(Iconsax.user, size: 17),
                     text: 'My Profile',
-                    ontap:injector.get<UserBloc>().appUser != null? () {
-                      context.pushNamed(PageUrl.my_profile);
-                    }:(){
-                      CustomDialogs.showToast("Please login to continue");
-                    },
+                    ontap:
+                        injector.get<UserBloc>().appUser != null
+                            ? () {
+                              context.pushNamed(PageUrl.my_profile);
+                            }
+                            : () {
+                              CustomDialogs.showToast(
+                                "Please login to continue",
+                              );
+                            },
                   ),
                   ProfileItem(
                     widget: Icon(Icons.sell_outlined, size: 17),
@@ -444,21 +458,31 @@ class _ProfileState extends State<Profile> {
                   ProfileItem(
                     widget: Icon(Icons.favorite_border, size: 17),
                     text: 'Saved Items',
-                    ontap:injector.get<UserBloc>().appUser != null? () {
-                      context.pushNamed(PageUrl.wishlist);
-                    }:(){
-                      CustomDialogs.showToast("Please login to continue");
-                    },
+                    ontap:
+                        injector.get<UserBloc>().appUser != null
+                            ? () {
+                              context.pushNamed(PageUrl.wishlist);
+                            }
+                            : () {
+                              CustomDialogs.showToast(
+                                "Please login to continue",
+                              );
+                            },
                   ),
 
                   ProfileItem(
                     widget: Icon(Iconsax.shopping_bag, size: 17),
                     text: 'My Orders',
-                    ontap:injector.get<UserBloc>().appUser != null? () {
-                      context.pushNamed(PageUrl.my_orders);
-                    }:(){
-                      CustomDialogs.showToast("Please login to continue");
-                    },
+                    ontap:
+                        injector.get<UserBloc>().appUser != null
+                            ? () {
+                              context.pushNamed(PageUrl.my_orders);
+                            }
+                            : () {
+                              CustomDialogs.showToast(
+                                "Please login to continue",
+                              );
+                            },
                   ),
                   ProfileItem(
                     widget: Icon(Iconsax.people, size: 17),
@@ -509,11 +533,7 @@ class _ProfileState extends State<Profile> {
                   // ),
                   0.verticalSpace,
                   ProfileItem(
-                    widget: Icon(
-                      Icons.person_off,
-                      size: 17,
-                      color: Colors.red,
-                    ),
+                    widget: Icon(Icons.person_off, size: 17, color: Colors.red),
                     text: 'SignIn/SignUp',
                     ontap: () {
                       // _logout(context);
@@ -649,19 +669,18 @@ class ReferalContainer extends StatefulWidget {
 }
 
 class _ReferalContainerState extends State<ReferalContainer> {
-
-  final motiveController=TextEditingController();
-  final referkey=GlobalKey<FormState>();
-  final referbloc=ProfileBloc(ProfileRepositoryImpl(NetworkService()));
+  final motiveController = TextEditingController();
+  final referkey = GlobalKey<FormState>();
+  final referbloc = ProfileBloc(ProfileRepositoryImpl(NetworkService()));
+  final user = injector.get<UserBloc>();
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
-
       ),
       child: Form(
         key: referkey,
@@ -675,19 +694,29 @@ class _ReferalContainerState extends State<ReferalContainer> {
                 2.horizontalSpace,
 
                 InkWell(
-                  onTap: (){
-                    context.pop(
-
-                    );
+                  onTap: () {
+                    context.pop();
                   },
-                    child: Icon(Icons.cancel_rounded))
+                  child: Icon(Icons.cancel_rounded),
+                ),
               ],
             ),
-            Center(child: TextView(text: "Refer And Earn",fontSize: 16,fontWeight: FontWeight.w500,)),
+            Center(
+              child: TextView(
+                text: "Refer And Earn",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             10.verticalSpace,
-            TextView(text: "Earn rewards for every friend who buys after your referral",fontSize: 12,align: TextAlign.center,)
-        ,20.verticalSpace,
-        TextView(text: "Your Motive"),
+            TextView(
+              text:
+                  "Earn rewards for every friend who buys after your referral",
+              fontSize: 12,
+              align: TextAlign.center,
+            ),
+            20.verticalSpace,
+            TextView(text: "Your Motive"),
             5.verticalSpace,
             FilledTextField(
               controller: motiveController,
@@ -700,44 +729,89 @@ class _ReferalContainerState extends State<ReferalContainer> {
 
             BlocConsumer<ProfileBloc, ProfileState>(
               bloc: referbloc,
-  listener: _listenToProfileState,
-  builder: (context, state) {
-    return Column(
-      children: [
-        state is ProfileloadingState?SizedBox(): 10.verticalSpace,
-        state is ProfilefailiureState?Container(
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.redAccent
-          ),
-            child: TextView(fontSize: 10,color: Colors.white,fontWeight: FontWeight.w500,text:state is ProfilefailiureState?state.error:"" )):SizedBox(),
-        state is ProfileloadingState?SizedBox(): 10.verticalSpace,
-        state is ReferSuccessState?Container(
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Pallets.mildBlue
+              listener: _listenToProfileState,
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    state is ProfileloadingState
+                        ? SizedBox()
+                        : 10.verticalSpace,
+                    state is ProfilefailiureState
+                        ? Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.redAccent,
+                          ),
+                          child: TextView(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            text:
+                                state is ProfilefailiureState
+                                    ? state.error
+                                    : "",
+                          ),
+                        )
+                        : SizedBox(),
+                    state is ProfileloadingState
+                        ? SizedBox()
+                        : 10.verticalSpace,
+                    state is ReferSuccessState
+                        ? Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Pallets.mildBlue,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: TextView(
+                                  fontSize: 10,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  text: state is ReferSuccessState ? "" : "",
+                                ),
+                              ),
+                              TextView(
+                                text: "Copy",
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+                        )
+                        : SizedBox(),
+                    state is ProfileloadingState
+                        ? SizedBox()
+                        : 10.verticalSpace,
+                    CustomButton(
+                      child:
+                          state is ProfileloadingState
+                              ? TextView(
+                                text: "Getting referral link",
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                              )
+                              : TextView(
+                                text: "Get Referral Code",
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                      onPressed: () {
+                        getCode();
+                      },
+                    ),
+                  ],
+                );
+              },
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(width: 200,
-                    child: TextView(fontSize: 10,color: Colors.white,fontWeight: FontWeight.w500,text:state is ReferSuccessState?"":"" )),
-                TextView(text: "Copy",fontSize: 12,fontWeight: FontWeight.w500,onTap: (){},)
-              ],
-            )):SizedBox(),
-        state is ProfileloadingState?SizedBox(): 10.verticalSpace,
-        CustomButton(child:state is ProfileloadingState?TextView(text: "Getting referral link",color: Colors.white,fontWeight: FontWeight.w500,fontSize: 15,): TextView(text: "Get Referral Code",color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500,), onPressed: (){
-                  getCode();
-                }),
-
-
-      ],
-    );
-  },
-)
-
           ],
         ),
       ),
@@ -745,23 +819,29 @@ class _ReferalContainerState extends State<ReferalContainer> {
   }
 
   void getCode() {
-    if(referkey.currentState!.validate()){
-referbloc.add(ReferEvent(ReferalPaayload(name: "name", motive: motiveController.text.trim().toString())));
+    if (referkey.currentState!.validate()) {
+      referbloc.add(
+        ReferEvent(
+          ReferalPaayload(
+            name:
+                "${user.appUser?.firstName ?? ''} ${user.appUser?.lastName ?? ''}"
+                    .trim(),
+            motive: motiveController.text.trim().toString(),
+          ),
+        ),
+      );
     }
   }
 
   void _listenToProfileState(BuildContext context, ProfileState state) {
-    if(state is ProfileloadingState){
+    if (state is ProfileloadingState) {
       CustomDialogs.showLoading(context);
     }
-    if(state is ProfilefailiureState) {
-      context.pop(
-      );
+    if (state is ProfilefailiureState) {
+      context.pop();
     }
-      if(state is ReferSuccessState){
-        context.pop();
-      }
-
-
+    if (state is ReferSuccessState) {
+      context.pop();
+    }
   }
 }
