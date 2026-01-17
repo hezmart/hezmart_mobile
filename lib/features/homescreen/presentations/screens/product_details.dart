@@ -84,6 +84,24 @@ class _ProductDetailsState extends State<ProductDetails> {
     super.dispose();
   }
 
+
+  bool get productHasOptions {
+    final options = singleRes?.data?.product?.options ?? [];
+    return options.isNotEmpty;
+  }
+  bool get optionsSelected {
+    final options = singleRes?.data?.product?.options ?? [];
+
+    for (final option in options) {
+      final optionName = option.name;
+      if (optionName != null && !selectedOptionValues.containsKey(optionName)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
   SingleProductsResponse? singleRes;
   @override
   Widget build(BuildContext context) {
@@ -291,6 +309,61 @@ class _ProductDetailsState extends State<ProductDetails> {
                           //   ),
 
                           20.verticalSpace,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                onTap: () {
+                                  if (number > 1) {
+                                    setState(() {
+                                      number--;
+                                    });
+                                  }
+                                },
+
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Icon(Iconsax.minus),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(color: Color(0xff9b0000))),
+                                ),
+                              ),
+                              10.horizontalSpace,
+                              TextView(text: number.toString()),
+                              10.horizontalSpace,
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        onTap: () {
+                          final int availability =
+                              state.response.data?.product?.stockQuantity ?? 0;
+
+                          if (number >= availability) {
+                            CustomDialogs.showToast(
+                              "Only $availability item(s) available in stock",
+                            );
+                          } else {
+                            setState(() {
+                              number++;
+                            });
+                          }
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          child: Icon(Iconsax.add),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: Color(0xff9b0000)),
+                          ),
+                        ),
+                      )
+
+                      ],
+                          ),
+                          20.verticalSpace,
                           TextView(
                             text: product!.category!.name.toString(),
                             fontSize: 16,
@@ -304,7 +377,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                             fontWeight: FontWeight.w600,
                           ),
                           10.verticalSpace,
-                          4.verticalSpace,
                           if (product.options.isNotEmpty)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,8 +431,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 );
                               }),
                             ),
-
-
                           10.verticalSpace,
                           Row(
                             children: [
@@ -722,23 +792,56 @@ class _ProductDetailsState extends State<ProductDetails> {
   //   );
   // }
 
+  // void addToCart() {
+  //   final selectedColor = selectedOptionValues['Color'] ?? '';
+  //   final selectedSize = selectedOptionValues['Size'] ?? '';
+  //
+  //
+  //
+  //   if(selectedOptionValues.isEmpty){
+  //     cart.add(
+  //       AddItemToCart(
+  //         AddToCartpayload(
+  //           productId: singleRes?.data?.product?.id.toString(),
+  //           quantity: number,
+  //           options: Options(
+  //             size: selectedSize,
+  //             color: selectedColor,
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  //   else{
+  //     CustomDialogs.showToast("please select color and size");
+  //   }
+  //
+  // }
   void addToCart() {
-    final selectedColor = selectedOptionValues['Color'] ?? '';
-    final selectedSize = selectedOptionValues['Size'] ?? '';
+    final product = singleRes?.data?.product;
+
+    if (product == null) return;
+
+    // If product has options but user didn't select all
+    if (productHasOptions && !optionsSelected) {
+      CustomDialogs.showToast("Please select color and size options");
+      return;
+    }
 
     cart.add(
       AddItemToCart(
         AddToCartpayload(
-          productId: singleRes?.data?.product?.id.toString(),
-          quantity: "1",
+          productId: product.id.toString(),
+          quantity: number,
           options: Options(
-            size: selectedSize,
-            color: selectedColor,
+            size: selectedOptionValues['Size'] ?? '',
+            color: selectedOptionValues['Color'] ?? '',
           ),
         ),
       ),
     );
   }
+
 
 }
 
