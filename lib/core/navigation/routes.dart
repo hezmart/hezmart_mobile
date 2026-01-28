@@ -26,6 +26,8 @@ import 'package:hezmart/features/homescreen/presentations/screens/shop_vendor_pr
 import 'package:hezmart/features/homescreen/presentations/screens/shopsscreen.dart';
 import 'package:hezmart/features/homescreen/presentations/widgets/description_details.dart';
 import 'package:hezmart/features/homescreen/presentations/widgets/weekly_offer.dart';
+import 'package:hezmart/features/logistics/presentations/screens/logistics.dart';
+import 'package:hezmart/features/logistics/presentations/screens/rider_details.dart';
 import 'package:hezmart/features/my_orders/presentations/sscreens/my_orders.dart';
 import 'package:hezmart/features/my_orders/presentations/sscreens/order_details.dart';
 import 'package:hezmart/features/my_orders/presentations/sscreens/track_order.dart';
@@ -73,6 +75,7 @@ final bloc = injector.get<CartBloc>();
 final faavbloc = injector.get<FavouriteBloc>();
 final cartcheckout = injector.get<CartBloc>();
 final success = injector.get<CartBloc>();
+
 class CustomRoutes {
   static final goRouter = GoRouter(
     initialLocation: '/splash_screen',
@@ -94,7 +97,8 @@ class CustomRoutes {
         path: '/signin_screen',
         name: PageUrl.signin_screen,
         builder: (context, state) => const SigninScreen(),
-      ),  GoRoute(
+      ),
+      GoRoute(
         path: '/success_order',
         name: PageUrl.success_order,
         builder: (context, state) => const SuccessOrder(),
@@ -190,25 +194,48 @@ class CustomRoutes {
         builder: (context, state) => const Shopsscreen(),
       ),
       GoRoute(
+        path: '/logistics',
+        name: PageUrl.logistics,
+        builder: (context, state) => const LogisticsAndDelivery(),
+      ),
+      GoRoute(
+        path: '/rider_details',
+        name: PageUrl.rider_details,
+        builder: (context, state) => const RiderDetails(),
+      ),
+      GoRoute(
         path: '/see_all',
         name: PageUrl.see_all,
-        builder: (context, state) =>  SeeAll(catId: state.uri.queryParameters[PathParam.id] ?? '', name:  state.uri.queryParameters[PathParam.userName] ?? '',),
-      ),      GoRoute(
+        builder:
+            (context, state) => SeeAll(
+              catId: state.uri.queryParameters[PathParam.id] ?? '',
+              name: state.uri.queryParameters[PathParam.userName] ?? '',
+            ),
+      ),
+      GoRoute(
         path: '/cash_success_order',
         name: PageUrl.cash_success_order,
-        builder: (context, state) =>  BlocProvider.value(
-            value: cartcheckout,
-        child: CashSuccessOrder(ref: (state.extra as CashSuccessOrderParams).ref, url: (state.extra as CashSuccessOrderParams).url)),
-      ),   GoRoute(
+        builder:
+            (context, state) => BlocProvider.value(
+              value: cartcheckout,
+              child: CashSuccessOrder(
+                ref: (state.extra as CashSuccessOrderParams).ref,
+                url: (state.extra as CashSuccessOrderParams).url,
+              ),
+            ),
+      ),
+      GoRoute(
         path: '/description_details',
         name: PageUrl.description_details,
-        builder: (context, state) =>  DescriptionDetails(
-          description: (state.extra as DesParams).description,
-          category: (state.extra as DesParams).category,
-          subCategory: (state.extra as DesParams).subCategory,
-          weight: (state.extra as DesParams).weight,
-          taxable:(state.extra as DesParams).taxable,
-          isDigital: (state.extra as DesParams).isDigital,),
+        builder:
+            (context, state) => DescriptionDetails(
+              description: (state.extra as DesParams).description,
+              category: (state.extra as DesParams).category,
+              subCategory: (state.extra as DesParams).subCategory,
+              weight: (state.extra as DesParams).weight,
+              taxable: (state.extra as DesParams).taxable,
+              isDigital: (state.extra as DesParams).isDigital,
+            ),
       ),
       GoRoute(
         path: '/shop_vendor_products',
@@ -223,12 +250,13 @@ class CustomRoutes {
         path: '/search_screen',
         name: PageUrl.search_screen,
         builder: (context, state) => const SearchScreen(),
-      ),  GoRoute(
+      ),
+      GoRoute(
         path: '/help',
         name: PageUrl.help,
         builder: (context, state) => const HelpTab(),
       ),
-  GoRoute(
+      GoRoute(
         path: '/weekly_offer',
         name: PageUrl.weekly_offer,
         builder: (context, state) => const WeeklyOffer(),
@@ -249,7 +277,10 @@ class CustomRoutes {
       GoRoute(
         path: '/track_order',
         name: PageUrl.track_order,
-        builder: (context, state) =>  TrackOrder(status: state.uri.queryParameters[PathParam.userName] ?? '',),
+        builder:
+            (context, state) => TrackOrder(
+              status: state.uri.queryParameters[PathParam.userName] ?? '',
+            ),
       ),
       GoRoute(
         path: '/getsubcatss',

@@ -52,7 +52,7 @@ class _CustomButtonState extends State<CustomButton> {
                   elevation: widget.elevation,
                   padding: widget.padding ?? const EdgeInsets.all(15),
                   foregroundColor: widget.foregroundColor ??
-                      Theme.of(context).colorScheme.onPrimary,
+                      Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius:
                           widget.borderRadius ?? BorderRadius.circular(10)),

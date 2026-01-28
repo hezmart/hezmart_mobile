@@ -316,13 +316,21 @@ class _ProfileState extends State<Profile> {
                                   context.pushNamed(PageUrl.my_orders);
                                 },
                               ),
-                          ProfileItem(
-                            widget: Icon(Iconsax.people, size: 17),
-                            text: 'View Sellers',
-                            ontap: () {
-                              context.pushNamed(PageUrl.shopsscreen);
-                            },
-                          ),
+                          // ProfileItem(
+                          //   widget: Icon(Iconsax.car, size: 17),
+                          //   text: 'Logistics And Delivery',
+                          //   ontap: () {
+                          //     context.pushNamed(PageUrl.logistics);
+                          //   },
+                          // ),
+
+                          // ProfileItem(
+                          //   widget: Icon(Iconsax.people, size: 17),
+                          //   text: 'View Sellers',
+                          //   ontap: () {
+                          //     context.pushNamed(PageUrl.shopsscreen);
+                          //   },
+                          // ),
 
                           // 20.verticalSpace,
                           TextView(
@@ -406,159 +414,168 @@ class _ProfileState extends State<Profile> {
               );
             }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // TextView(text: "Wallet",fontSize: 17,fontWeight: FontWeight.w500,),
-                  // 20.verticalSpace,
-                  // ProfileItem(widget: Icon(Iconsax.wallet,size: 17,), text: 'Wallet',),
-                  20.verticalSpace,
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // TextView(text: "Wallet",fontSize: 17,fontWeight: FontWeight.w500,),
+                    // 20.verticalSpace,
+                    // ProfileItem(widget: Icon(Iconsax.wallet,size: 17,), text: 'Wallet',),
+                    20.verticalSpace,
 
-                  TextView(
-                    text: "Account Information",
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  Divider(),
-                  20.verticalSpace,
-                  ProfileItem(
-                    widget: Icon(Iconsax.user, size: 17),
-                    text: 'My Profile',
-                    ontap:
-                        injector.get<UserBloc>().appUser != null
-                            ? () {
-                              context.pushNamed(PageUrl.my_profile);
-                            }
-                            : () {
-                              CustomDialogs.showToast(
-                                "Please login to continue",
-                              );
-                            },
-                  ),
-                  ProfileItem(
-                    widget: Icon(Icons.sell_outlined, size: 17),
-                    text: 'Sell On Hezmart',
-                    ontap: () {
-                      Helpers.launchRawUrl(
-                        'https://hezmart.com/sell-on-hezmart',
-                      );
-                      // context.pushNamed(PageUrl.my_orders);
-                    },
-                  ),
-                  // 20.verticalSpace,
-                  TextView(
-                    text: "My Activities",
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  Divider(),
-                  20.verticalSpace,
-                  ProfileItem(
-                    widget: Icon(Icons.favorite_border, size: 17),
-                    text: 'Saved Items',
-                    ontap:
-                        injector.get<UserBloc>().appUser != null
-                            ? () {
-                              context.pushNamed(PageUrl.wishlist);
-                            }
-                            : () {
-                              CustomDialogs.showToast(
-                                "Please login to continue",
-                              );
-                            },
-                  ),
+                    TextView(
+                      text: "Account Information",
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    Divider(),
+                    20.verticalSpace,
+                    ProfileItem(
+                      widget: Icon(Iconsax.user, size: 17),
+                      text: 'My Profile',
+                      ontap:
+                          injector.get<UserBloc>().appUser != null
+                              ? () {
+                                context.pushNamed(PageUrl.my_profile);
+                              }
+                              : () {
+                                CustomDialogs.showToast(
+                                  "Please login to continue",
+                                );
+                              },
+                    ),
+                    ProfileItem(
+                      widget: Icon(Icons.sell_outlined, size: 17),
+                      text: 'Sell On Hezmart',
+                      ontap: () {
+                        Helpers.launchRawUrl(
+                          'https://hezmart.com/sell-on-hezmart',
+                        );
+                        // context.pushNamed(PageUrl.my_orders);
+                      },
+                    ),
+                    // 20.verticalSpace,
+                    TextView(
+                      text: "My Activities",
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    Divider(),
+                    20.verticalSpace,
+                    ProfileItem(
+                      widget: Icon(Icons.favorite_border, size: 17),
+                      text: 'Saved Items',
+                      ontap:
+                          injector.get<UserBloc>().appUser != null
+                              ? () {
+                                context.pushNamed(PageUrl.wishlist);
+                              }
+                              : () {
+                                CustomDialogs.showToast(
+                                  "Please login to continue",
+                                );
+                              },
+                    ),
 
-                  ProfileItem(
-                    widget: Icon(Iconsax.shopping_bag, size: 17),
-                    text: 'My Orders',
-                    ontap:
-                        injector.get<UserBloc>().appUser != null
-                            ? () {
-                              context.pushNamed(PageUrl.my_orders);
-                            }
-                            : () {
-                              CustomDialogs.showToast(
-                                "Please login to continue",
-                              );
-                            },
-                  ),
-                  ProfileItem(
-                    widget: Icon(Iconsax.people, size: 17),
-                    text: 'View Sellers',
-                    ontap: () {
-                      context.pushNamed(PageUrl.shopsscreen);
-                    },
-                  ),
+                    ProfileItem(
+                      widget: Icon(Iconsax.shopping_bag, size: 17),
+                      text: 'My Orders',
+                      ontap:
+                          injector.get<UserBloc>().appUser != null
+                              ? () {
+                                context.pushNamed(PageUrl.my_orders);
+                              }
+                              : () {
+                                CustomDialogs.showToast(
+                                  "Please login to continue",
+                                );
+                              },
+                    ),
+                    // ProfileItem(
+                    //   widget: Icon(Iconsax.people, size: 17),
+                    //   text: 'View Sellers',
+                    //   ontap: () {
+                    //     context.pushNamed(PageUrl.shopsscreen);
+                    //   },
+                    // ),
+                    // ProfileItem(
+                    //   widget: Icon(Iconsax.people, size: 17),
+                    //   text: 'Logistics And Delivery',
+                    //   ontap: () {
+                    //     context.pushNamed(PageUrl.shopsscreen);
+                    //   },
+                    // ),
 
-                  // 20.verticalSpace,
-                  TextView(
-                    text: "Account Settings",
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  Divider(),
+                    // 20.verticalSpace,
+                    TextView(
+                      text: "Account Settings",
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    Divider(),
 
-                  20.verticalSpace,
-                  ProfileItem(
-                    widget: Icon(Icons.support_agent_rounded, size: 17),
-                    text: 'Privacy Policy',
-                    ontap: () {
-                      context.pushNamed(PageUrl.privacy);
-                    },
-                  ),
-                  ProfileItem(
-                    widget: Icon(Icons.policy_outlined, size: 17),
-                    text: 'Return Policy',
-                    ontap: () {
-                      Helpers.launchRawUrl(
-                        'https://hezmart.com/returns-refunds-policy',
-                      );
-                    },
-                  ),
-                  ProfileItem(
-                    widget: Icon(Icons.support_agent_rounded, size: 17),
-                    text: 'Contact Us',
-                    ontap: () {
-                      context.pushNamed(PageUrl.help);
-                    },
-                  ),
-                  // ProfileItem(
-                  //   widget: Icon(Icons.support_agent_rounded, size: 17),
-                  //   text: 'Contact Support',
-                  //   ontap: () {
-                  //     context.pushNamed(PageUrl.mypro);
-                  //   },
-                  // ),
-                  0.verticalSpace,
-                  ProfileItem(
-                    widget: Icon(Icons.person_off, size: 17, color: Colors.red),
-                    text: 'SignIn/SignUp',
-                    ontap: () {
-                      // _logout(context);
-                      context.pushNamed(PageUrl.signin_screen);
-                    },
-                  ),
+                    20.verticalSpace,
+                    ProfileItem(
+                      widget: Icon(Icons.support_agent_rounded, size: 17),
+                      text: 'Privacy Policy',
+                      ontap: () {
+                        context.pushNamed(PageUrl.privacy);
+                      },
+                    ),
+                    ProfileItem(
+                      widget: Icon(Icons.policy_outlined, size: 17),
+                      text: 'Return Policy',
+                      ontap: () {
+                        Helpers.launchRawUrl(
+                          'https://hezmart.com/returns-refunds-policy',
+                        );
+                      },
+                    ),
+                    ProfileItem(
+                      widget: Icon(Icons.support_agent_rounded, size: 17),
+                      text: 'Contact Us',
+                      ontap: () {
+                        context.pushNamed(PageUrl.help);
+                      },
+                    ),
+                    // ProfileItem(
+                    //   widget: Icon(Icons.support_agent_rounded, size: 17),
+                    //   text: 'Contact Support',
+                    //   ontap: () {
+                    //     context.pushNamed(PageUrl.mypro);
+                    //   },
+                    // ),
+                    0.verticalSpace,
+                    ProfileItem(
+                      widget: Icon(Icons.person_off, size: 17, color: Colors.red),
+                      text: 'SignIn/SignUp',
+                      ontap: () {
+                        // _logout(context);
+                        context.pushNamed(PageUrl.signin_screen);
+                      },
+                    ),
 
-                  // BlocConsumer<AuthBloc, AuthState>(
-                  //   bloc: authbloc,
-                  //   listener: _listenToSinoutState,
-                  //   builder: (context, state) {
-                  //
-                  //     return ProfileItem(
-                  //       widget: Icon(Icons.logout, size: 17, color: Colors.red,),
-                  //       text: 'Logout',
-                  //       ontap: () {
-                  //         _signout();
-                  //         // context.pushNamed(PageUrl.mypro);
-                  //       },
-                  //     );
-                  //   },
-                  // ),
-                  20.verticalSpace,
-                  // ProfileItem(widget: Icon(Iconsax.user), text: 'My Profile',)
-                ],
+                    // BlocConsumer<AuthBloc, AuthState>(
+                    //   bloc: authbloc,
+                    //   listener: _listenToSinoutState,
+                    //   builder: (context, state) {
+                    //
+                    //     return ProfileItem(
+                    //       widget: Icon(Icons.logout, size: 17, color: Colors.red,),
+                    //       text: 'Logout',
+                    //       ontap: () {
+                    //         _signout();
+                    //         // context.pushNamed(PageUrl.mypro);
+                    //       },
+                    //     );
+                    //   },
+                    // ),
+                    20.verticalSpace,
+                    // ProfileItem(widget: Icon(Iconsax.user), text: 'My Profile',)
+                  ],
+                ),
               ),
             );
             //   AppPromptWidget(

@@ -18,6 +18,8 @@ class PageUrl {
 
   static const home = 'home';
   static const shopsscreen = 'shopsscreen';
+  static const logistics = 'logistics';
+  static const rider_details= 'rider_details';
   static const shop_vendor_products = 'shop_vendor_products';
   static const search_screen = 'search_screen';
   static const help = 'help_tab';
