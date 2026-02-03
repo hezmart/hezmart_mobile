@@ -1,14 +1,19 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 // import 'package:timezone/data/latest.dart' as tz;
 import 'package:hezmart/app.dart';
+import 'package:upgrader/upgrader.dart';
 
 
 import 'core/di/injector.dart';
 import 'core/services/data/hive/hive_manager.dart';
 import 'core/services/data/session_manager.dart';
 
+import 'core/services/firebase/crashlytics.dart';
+import 'core/services/firebase/notifiactions.dart';
 import 'core/services/network/url_config.dart';
 import 'package:hezmart/core/di/injector.dart' as di;
 
@@ -38,17 +43,26 @@ class AppConfig {
 
   Future<void> _setup() async {
     WidgetsFlutterBinding.ensureInitialized();
+
     // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-    // initFirebaseServices();
+    initFirebaseServices();
     // await SessionManager.instance.init();
-    // tz.initializeTimeZones();
     // await Hive.initFlutter();
+    await Upgrader.clearSavedSettings();
     await di.init();
-    // await initializeDB();
+    await initializeDB();
     await initCore();
     await setup();
     runApp(const Hezmart());
     // FlutterNativeSplash.remove();
+
+    // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    initFirebaseServices();
+    // await SessionManager.instance.init();
+
+    // await Hive.initFlutter();
+
+
   }
 
   Future setup() async {
@@ -66,34 +80,34 @@ class AppConfig {
     }
   }
 
-  // Future<void> initFirebaseServices() async {
-  //   await Firebase.initializeApp(
-  //     // options: DefaultFirebaseOptions.currentPlatform,
-  //   );
-  //   CrashlyticsService.onCrash();
-  //
-  //   await notificationService.initializeNotification();
-  //   // FirebaseDatabase.instance.setPersistenceEnabled(true);
-  //   // await FirebaseMessaging.instance.getInitialMessage();
-  //   signMessageUser();
-  // }
+  Future<void> initFirebaseServices() async {
+    await Firebase.initializeApp(
+      // options: DefaultFirebaseOptions.currentPlatform,
+    );
+    CrashlyticsService.onCrash();
 
-  // void signMessageUser() async {
-  //   try {
-  //     final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-  //       email: UrlConfig.messageUserEmail,
-  //       password: UrlConfig.messageUserPassKey,
-  //     );
-  //
-  //     logger.wtf(credential.user?.email);
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'user-not-found') {
-  //       logger.e('No user found for that email.');
-  //     } else if (e.code == 'wrong-password') {
-  //       logger.e('Wrong password provided for that user.');
-  //     }
-  //   }
-  // }
+    await notificationService.initializeNotification();
+    // FirebaseDatabase.instance.setPersistenceEnabled(true);
+    // await FirebaseMessaging.instance.getInitialMessage();
+    signMessageUser();
+  }
+
+  void signMessageUser() async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: UrlConfig.messageUserEmail,
+        password: UrlConfig.messageUserPassKey,
+      );
+
+      logger.wtf(credential.user?.email);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        logger.e('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        logger.e('Wrong password provided for that user.');
+      }
+    }
+  }
 
   Future<void> initializeDB() async {
     await Hive.initFlutter();

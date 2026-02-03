@@ -3,6 +3,10 @@ import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -32,7 +36,7 @@ android {
         applicationId = "com.hezmart.app"
         minSdk = flutter.minSdkVersion
         targetSdk = 35
-        versionCode = 19
+        versionCode = 22
         versionName = "1.0.1"
         multiDexEnabled = true
     }

@@ -208,9 +208,8 @@ class _ProfileState extends State<Profile> {
                           5.verticalSpace,
                           InkWell(
                             onTap: () {
-                              Helpers.launchRawUrl(
-                                'https://hezmart.com/#max-widget',
-                              );
+                              Helpers.launchUrl("https://www.hezmart.com/contact");
+
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),
@@ -404,7 +403,7 @@ class _ProfileState extends State<Profile> {
                           //     );
                           //   },
                           // ),
-                          20.verticalSpace,
+                          40.verticalSpace,
                           // ProfileItem(widget: Icon(Iconsax.user), text: 'My Profile',)
                         ],
                       ),

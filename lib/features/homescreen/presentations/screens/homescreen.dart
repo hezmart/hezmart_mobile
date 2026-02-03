@@ -12,7 +12,9 @@ import 'package:hezmart/common/widgets/text_view.dart';
 import 'package:hezmart/core/di/injector.dart';
 import 'package:hezmart/core/navigation/route_url.dart';
 import 'package:hezmart/core/services/network/network_service.dart';
+import 'package:hezmart/core/utils/helper_utils.dart';
 import 'package:hezmart/core/utils/theme/app_colors.dart';
+import 'package:hezmart/core/utils/url_launcher.dart';
 import 'package:hezmart/features/homescreen/data/data/product_repo_impl/product_repo_impl.dart';
 import 'package:hezmart/features/homescreen/presentations/bloc/products_bloc.dart';
 import 'package:hezmart/features/homescreen/presentations/widgets/flash_sales.dart';
@@ -22,6 +24,7 @@ import 'package:hezmart/features/wishlist/data/data/repossitory_impl/repossitory
 import 'package:hezmart/features/wishlist/presentations/fav_bloc/favourite_bloc.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../common/widgets/custom_dialogs.dart';
 import '../../../../common/widgets/shimmer_box_widget.dart';
@@ -91,8 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
             Platform.isIOS
                 ? UpgradeDialogStyle.cupertino
                 : UpgradeDialogStyle.material,
+
         shouldPopScope: () => true,
-        upgrader: Upgrader(durationUntilAlertAgain: Duration(days: 5)),
+        upgrader:
+        Upgrader(
+          durationUntilAlertAgain: Duration(days: 5,),
+        ),
         child: SingleChildScrollView(
           child: BlocConsumer<ProductsBloc, ProductsState>(
             bloc: products,
@@ -553,7 +560,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 10.verticalSpace,
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.only(left: 10,right: 10,bottom: 20),
                                   child: GridView(
                                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
@@ -1002,12 +1009,76 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }),
                                       ),
                                     ),
-                                    10.verticalSpace,
+                                    // 10.verticalSpace,
                                   ],
                                 );
                               }).toList(),
                         ),
 
+Center(child: TextView(text: "See All Products",fontSize: 15,fontWeight: FontWeight.w500,onTap: (){
+  context.goNamed(PageUrl.categories);
+
+},)),
+5.verticalSpace,
+Container(decoration: BoxDecoration(
+  borderRadius: BorderRadius.circular(5),
+  color: Pallets.grey95.withOpacity(0.2)
+),
+  padding: EdgeInsets.all(15),
+  child: Column(
+    children: [
+
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          InkWell(
+            onTap: (){
+              Helpers.launchUrl("https://www.hezmart.com/privacy-policy");
+              },
+            child: TextView(text: "Privacy Policy",
+              color: Color(0xffE67002),
+              onTap: ()  {
+                Helpers.launchUrl("https://www.hezmart.com/privacy-policy");
+
+              },),
+          ),
+          InkWell(
+            onTap: (){
+              Helpers.launchUrl("https://www.hezmart.com/returns-refunds-policy");
+            },
+            child: TextView(text: "Return Policy",
+              color: Color(0xffE67002),
+              onTap: (){
+                Helpers.launchUrl("https://www.hezmart.com/returns-refunds-policy");
+              },
+            ),
+          ),
+        ],
+      ),
+      10.verticalSpace,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: ()  {
+              Helpers.launchUrl("https://www.hezmart.com/contact");
+
+            },
+            child: TextView(text: "Contact Us",
+              color: Color(0xffE67002),
+              onTap: ()  {
+                Helpers.launchUrl("https://www.hezmart.com/contact");
+
+              },),
+          ),
+
+        ],
+      ),
+    ],
+  ),
+),
+
+                        20.verticalSpace,
                         70.verticalSpace,
                       ],
                     ),

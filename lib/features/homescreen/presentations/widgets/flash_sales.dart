@@ -10,6 +10,7 @@ import 'package:hezmart/common/widgets/text_view.dart';
 import 'package:hezmart/core/navigation/route_url.dart';
 import 'package:hezmart/core/theme/pallets.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../common/widgets/custom_dialogs.dart';
 import '../../../../common/widgets/error_widget.dart';
@@ -29,15 +30,21 @@ class FlashSales extends StatefulWidget {
 class _FlashSalesState extends State<FlashSales> {
   final products = ProductsBloc(ProductRepositoryImpl(NetworkService()));
 
+
   @override
   void initState() {
-    products.add(GetAllProductsEvent());
-    _startTimer();
     super.initState();
+    products.add(GetAllProductsEvent());
+    _loadOrCreateEndTime();
   }
+  @override
+
   late Timer _timer;
-  Duration _remainingTime =
-  const Duration(days: 30, hours: 20, minutes: 11, seconds: 14);
+  Duration _remainingTime = Duration.zero;
+  DateTime? _endTime;
+
+  // Duration _remainingTime =
+  // const Duration(days: 30, hours: 20, minutes: 11, seconds: 14);
 
   final Duration _initialDuration =
   const Duration(days: 30, hours: 20, minutes: 11, seconds: 14);
@@ -47,16 +54,48 @@ class _FlashSalesState extends State<FlashSales> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_remainingTime.inSeconds > 0) {
-          _remainingTime -= const Duration(seconds: 1);
-        } else {
-          _remainingTime = _initialDuration;
-        }
-      });
+      final now = DateTime.now();
+      final diff = _endTime!.difference(now);
+
+      if (diff.isNegative) {
+        timer.cancel();
+        setState(() {
+          _remainingTime = Duration.zero;
+        });
+      } else {
+        setState(() {
+          _remainingTime = diff;
+        });
+      }
     });
   }
 
+  Future<void> _loadOrCreateEndTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedEndTime = prefs.getInt('flash_sale_end_time');
+
+    if (storedEndTime != null) {
+      _endTime = DateTime.fromMillisecondsSinceEpoch(storedEndTime);
+    } else {
+      _endTime = DateTime.now().add(
+        const Duration(days: 30, hours: 20, minutes: 11, seconds: 14),
+      );
+      await prefs.setInt(
+        'flash_sale_end_time',
+        _endTime!.millisecondsSinceEpoch,
+      );
+    }
+
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
+    super.dispose();
+  }
 
 
   @override
