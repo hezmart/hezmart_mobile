@@ -1,28 +1,28 @@
 part of 'notification_bloc.dart';
 
-sealed class NotificationState extends Equatable {
-  const NotificationState();
+sealed class MyNotificationState extends Equatable {
+  const MyNotificationState();
 }
 
-final class NotificationInitial extends NotificationState {
+final class NotificationInitial extends MyNotificationState {
   @override
   List<Object> get props => [];
 }
 
 
-class NotificationLoadingState extends NotificationState{
+class NotificationLoadingState extends MyNotificationState{
   @override
   // TODO: implement props
   List<Object?> get props => [];
 
 }
-class NotificationSuccessState extends NotificationState{
+class NotificationSuccessState extends MyNotificationState{
   @override
   // TODO: implement props
   List<Object?> get props => [];
 
 }
-class NotificationFailiureState extends NotificationState{
+class NotificationFailiureState extends MyNotificationState{
   String error;
   NotificationFailiureState(this.error);
   @override

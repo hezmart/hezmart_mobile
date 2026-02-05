@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,12 +10,16 @@ import 'package:hezmart/core/services/network/network_service.dart';
 import 'package:hezmart/core/theme/pallets.dart';
 import 'package:hezmart/features/authentication/data/data/repo_impl/authrepositoryimpl.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../common/widgets/custom_button.dart';
 import '../../../../common/widgets/custom_outlined_button.dart';
 import '../../../../common/widgets/filled_textfield.dart';
 import '../../../../common/widgets/image_widget.dart';
 import '../../../../common/widgets/text_view.dart';
+import '../../../../core/di/injector.dart';
+import '../../../../core/services/firebase/notifiactions.dart';
+import '../../../notificationss/data/models/token_payload.dart';
 import '../authbloc/auth_bloc.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -190,7 +196,29 @@ class _SigninScreenState extends State<SigninScreen> {
     }
   }
 
-  void _listenToAuthState(BuildContext context, AuthState state) {
+  Future<void> resendTokenToBackend(String? userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedToken = prefs.getString('device_token');
+    if (savedToken == null) return;
+
+    final payload = SendTokenPayload(
+      token: savedToken,
+      platform: Platform.isIOS ? "ios" : "android",
+      userId: userId,
+    );
+    // if (notificationService.token == null) {
+    //   await notificationService._getToken; // fetch and save token
+    // }
+
+    // Now send token + userId to backend
+    await notificationService.resendTokenToBackend(payload:payload,userId: userId);
+
+
+    logger.i('Resent device token to backend for userId: $userId');
+  }
+
+
+  void _listenToAuthState(BuildContext context, AuthState state) async {
     if (state is AuthloadingState) {
       CustomDialogs.showLoading(context);
     }
@@ -201,6 +229,14 @@ class _SigninScreenState extends State<SigninScreen> {
     if (state is AuthSuccessState) {
       context.pop();
       CustomDialogs.success("Login successful");
+
+      // Get user ID from AuthSuccessState (adjust field names if different)
+      final userId = state.response.data?.user?.id.toString();
+
+
+      await notificationService.resendTokenToBackend(userId: userId.toString());
+
+
       context.goNamed(PageUrl.home);
     }
   }
@@ -209,7 +245,7 @@ class _SigninScreenState extends State<SigninScreen> {
     googleauth.add(GoogleSignUpEvent());
   }
 
-  void _listenToAuthGoogleState(BuildContext context, AuthState state) {
+  void _listenToAuthGoogleState(BuildContext context, AuthState state) async {
     if (state is AuthloadingState) {
       CustomDialogs.showLoading(context);
     }
@@ -220,7 +256,14 @@ class _SigninScreenState extends State<SigninScreen> {
     if (state is AuthGoogleSuccessState) {
       context.pop();
       CustomDialogs.success("Login successful");
+
+      final userId = state.response.data?.user?.id.toString(); // get userId from Google auth success
+      await notificationService.resendTokenToBackend(userId: userId.toString());
+
       context.goNamed(PageUrl.home);
     }
   }
+
+
+
 }

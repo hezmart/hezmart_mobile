@@ -86,6 +86,7 @@ class AppConfig {
     CrashlyticsService.onCrash();
 
     await notificationService.initializeNotification();
+
     // FirebaseDatabase.instance.setPersistenceEnabled(true);
     // await FirebaseMessaging.instance.getInitialMessage();
     signMessageUser();

@@ -36,7 +36,7 @@ class _LastViewedState extends State<LastViewed> {
           builder: (context, state) {
             if (state is ProductsFailiureState) {
               return SizedBox(
-                height: 1.sh,
+                height: 30,
                 child: Center(
                   child: AppPromptWidget(
                     onTap: () {

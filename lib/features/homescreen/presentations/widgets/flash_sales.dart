@@ -117,16 +117,18 @@ class _FlashSalesState extends State<FlashSales> {
           bloc: products,
           builder: (context, state) {
             if (state is ProductsFailiureState) {
-              return SizedBox(
-                height: 1.sh,
-                child: Center(
-                  child: AppPromptWidget(
-                    onTap: () {
-                      products.add(GetAllProductsEvent());
-                    },
-                  ),
-                ),
-              );
+              // return SizedBox(
+              //   height:30,
+              //   child: Center(
+              //     child: AppPromptWidget(
+              //       onTap: () {
+              //         products.add(GetAllProductsEvent());
+              //       },
+              //     ),
+              //   ),
+              // );
+
+              return SizedBox();
             }
 
             if(state is ProductsloadingState){

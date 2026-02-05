@@ -9,12 +9,12 @@ import 'package:hezmart/features/notificationss/domain/notification_repo.dart';
 part 'notification_event.dart';
 part 'notification_state.dart';
 
-class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
+class MyNotificationBloc extends Bloc<MyNotificationEvent, MyNotificationState> {
 
   NotificationRepository repository;
 
-  NotificationBloc(this.repository) : super(NotificationInitial()) {
-    on<NotificationEvent>((event, emit) {
+  MyNotificationBloc(this.repository) : super(NotificationInitial()) {
+    on<MyNotificationEvent>((event, emit) {
       // TODO: implement event handler
     });
 
@@ -23,7 +23,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
 
 
-  Future<void> _mapNotiTokenSentEventToState(NotiTokenSentEvent event, Emitter<NotificationState> emit
+  Future<void> _mapNotiTokenSentEventToState(NotiTokenSentEvent event, Emitter<MyNotificationState> emit
       ) async {
 
     try {

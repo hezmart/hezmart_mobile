@@ -1,11 +1,11 @@
 part of 'notification_bloc.dart';
 
-sealed class NotificationEvent extends Equatable {
-  const NotificationEvent();
+sealed class MyNotificationEvent extends Equatable {
+  const MyNotificationEvent();
 }
 
 
-class NotiTokenSentEvent extends NotificationEvent{
+class NotiTokenSentEvent extends MyNotificationEvent{
   SendTokenPayload payload;
   NotiTokenSentEvent(this.payload);
   @override

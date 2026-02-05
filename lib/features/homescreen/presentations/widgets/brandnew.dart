@@ -41,16 +41,18 @@ class _BrandnewState extends State<Brandnew> {
           bloc: products,
           builder: (context, state) {
             if (state is ProductsFailiureState) {
-              return SizedBox(
-                height: 1.sh,
-                child: Center(
-                  child: AppPromptWidget(
-                    onTap: () {
-                      products.add(GetHotProductsEvent());
-                    },
-                  ),
-                ),
-              );
+              return SizedBox();
+
+              // return SizedBox(
+              //   height:30,
+              //   child: Center(
+              //     child: AppPromptWidget(
+              //       onTap: () {
+              //         products.add(GetHotProductsEvent());
+              //       },
+              //     ),
+              //   ),
+              // );
             }
 
             if(state is ProductsloadingState){

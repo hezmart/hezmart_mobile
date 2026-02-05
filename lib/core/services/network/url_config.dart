@@ -127,6 +127,7 @@ class UrlConfig {
 // static const flash_sales="https://api.hezmart.com/api/v1/products?status=active&flashSale=true&page=1&limit=16";
 // static const last_viewed="https://api.hezmart.com/api/v1/recently-viewed";
 // static const refer="https://api.hezmart.com/api/v1/sales-rep/apply";
+//   static const tokensend="https://70da-102-90-116-205.ngrok-free.app/api/v1/notifications/subscribe";
 
 static const String signIn = 'https://70da-102-90-116-205.ngrok-free.app/api/v1/users/login';
   static const String signUp = 'https://70da-102-90-116-205.ngrok-free.app/api/v1/users/signup';

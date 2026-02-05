@@ -60,7 +60,7 @@ class SessionManager {
 
   bool get useBio => sharedPreferences!.getBool(KEY_USE_BIO) ?? false;
 
-  String get authToken => sharedPreferences!.getString(KEY_AUTH_TOKEN) ?? '';
+  String get authToken => sharedPreferences?.getString(KEY_AUTH_TOKEN) ?? '';
 
   String get refreshauthToken => sharedPreferences!.getString(KEY_AUTH_TOKEN) ?? '';
 
