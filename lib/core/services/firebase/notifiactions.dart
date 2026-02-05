@@ -7,6 +7,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../../features/notificationss/data/models/token_payload.dart';
+import '../../../features/notificationss/presentationss/bloc/notification_bloc.dart';
 import '../../di/injector.dart';
 import '../../theme/pallets.dart';
 
@@ -48,7 +50,7 @@ class NotificationService {
 
     flutterLocalNotificationsPlugin.initialize(
       InitializationSettings(
-        android: AndroidInitializationSettings('@drawable/launch'),
+        android:AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings(),
       ),
     );
@@ -118,6 +120,8 @@ class NotificationService {
           .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
           ?.requestNotificationsPermission();
+      FirebaseMessaging.instance.requestPermission();
+
     }
 
     /// initialize
@@ -161,6 +165,7 @@ class NotificationService {
   }
 
   /// Get users token
+  ///
   void _getToken() async {
     try {
       // final plainNotificationToken = PlainNotificationToken();
@@ -170,9 +175,16 @@ class NotificationService {
       notiToken = token ?? '';
       // logger.e(notiToken);
       logger.i('My Token: $token');
+
+
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  void _sendTokenToBackend(SendTokenPayload payload) {
+    final bloc = injector<NotificationBloc>();
+    bloc.add(NotiTokenSentEvent(payload));
   }
 
   /// Refresh users token
@@ -191,8 +203,8 @@ class NotificationService {
         android: AndroidNotificationDetails(
           channel.id,
           channel.name,
-          icon: "@drawable/launch",
-          importance: Importance.defaultImportance,
+          icon: "@mipmap/ic_launcher",
+          importance: Importance.high,
           priority: Priority.high,
           enableLights: true,
           color: Pallets.primary,

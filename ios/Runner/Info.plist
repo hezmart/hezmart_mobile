@@ -2,17 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>Hezmart needs access to your location to provide location-based services</string>
-
-<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-<string>Hezmart needs access to your location even when closed to provide background location services</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
-	<key>UIDeviceFamily</key>
-    <array>
-        <integer>1</integer>
-    </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -54,10 +45,22 @@
 	<string>We need access to your camera to take photos</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Hezmart uses this to securely grant you access</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Hezmart needs access to your location even when closed to provide background location services</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Hezmart needs access to your location to provide location-based services</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photos to let you select images</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
