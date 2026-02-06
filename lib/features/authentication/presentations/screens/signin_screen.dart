@@ -256,10 +256,8 @@ class _SigninScreenState extends State<SigninScreen> {
     if (state is AuthGoogleSuccessState) {
       context.pop();
       CustomDialogs.success("Login successful");
-
-      final userId = state.response.data?.user?.id.toString(); // get userId from Google auth success
+      final userId = state.response.data?.user?.id.toString();
       await notificationService.resendTokenToBackend(userId: userId.toString());
-
       context.goNamed(PageUrl.home);
     }
   }
