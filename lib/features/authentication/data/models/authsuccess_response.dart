@@ -1,22 +1,26 @@
 class AuthSuccessResponse {
   AuthSuccessResponse({
     required this.status,
-    required this.token,
+    required this.accessToken,
+    required this.refreshToken,
     required this.data,
   });
 
   final String? status;
-  final String? token;
+  final String? accessToken;
+  final String? refreshToken;
   final Data? data;
 
   AuthSuccessResponse copyWith({
     String? status,
-    String? token,
+    String? accessToken,
+    String? refreshToken,
     Data? data,
   }) {
     return AuthSuccessResponse(
       status: status ?? this.status,
-      token: token ?? this.token,
+      accessToken: accessToken ?? this.accessToken,
+      refreshToken: refreshToken ?? this.refreshToken,
       data: data ?? this.data,
     );
   }
@@ -24,20 +28,22 @@ class AuthSuccessResponse {
   factory AuthSuccessResponse.fromJson(Map<String, dynamic> json){
     return AuthSuccessResponse(
       status: json["status"],
-      token: json["token"],
+      accessToken: json["accessToken"],
+      refreshToken: json["refreshToken"],
       data: json["data"] == null ? null : Data.fromJson(json["data"]),
     );
   }
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "token": token,
+    "accessToken": accessToken,
+    "refreshToken": refreshToken,
     "data": data?.toJson(),
   };
 
   @override
   String toString(){
-    return "$status, $token, $data, ";
+    return "$status, $accessToken, $refreshToken, $data, ";
   }
 }
 
@@ -83,17 +89,14 @@ class HezmartUser {
     required this.state,
     required this.photo,
     required this.passwordChangedAt,
-    required this.passwordResetToken,
-    required this.passwordResetExpires,
     required this.role,
     required this.status,
-    required this.emailVerificationCode,
-    required this.emailVerificationExpires,
     required this.isEmailVerified,
     required this.ninNumber,
     required this.businessName,
     required this.businessCategoryId,
     required this.businessLogo,
+    required this.authProvider,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -107,17 +110,14 @@ class HezmartUser {
   final String? state;
   final String? photo;
   final dynamic passwordChangedAt;
-  final dynamic passwordResetToken;
-  final dynamic passwordResetExpires;
   final String? role;
   final String? status;
-  final dynamic emailVerificationCode;
-  final dynamic emailVerificationExpires;
   final bool? isEmailVerified;
   final dynamic ninNumber;
   final dynamic businessName;
   final dynamic businessCategoryId;
   final dynamic businessLogo;
+  final String? authProvider;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -131,17 +131,14 @@ class HezmartUser {
     String? state,
     String? photo,
     dynamic? passwordChangedAt,
-    dynamic? passwordResetToken,
-    dynamic? passwordResetExpires,
     String? role,
     String? status,
-    dynamic? emailVerificationCode,
-    dynamic? emailVerificationExpires,
     bool? isEmailVerified,
     dynamic? ninNumber,
     dynamic? businessName,
     dynamic? businessCategoryId,
     dynamic? businessLogo,
+    String? authProvider,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -155,17 +152,14 @@ class HezmartUser {
       state: state ?? this.state,
       photo: photo ?? this.photo,
       passwordChangedAt: passwordChangedAt ?? this.passwordChangedAt,
-      passwordResetToken: passwordResetToken ?? this.passwordResetToken,
-      passwordResetExpires: passwordResetExpires ?? this.passwordResetExpires,
       role: role ?? this.role,
       status: status ?? this.status,
-      emailVerificationCode: emailVerificationCode ?? this.emailVerificationCode,
-      emailVerificationExpires: emailVerificationExpires ?? this.emailVerificationExpires,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       ninNumber: ninNumber ?? this.ninNumber,
       businessName: businessName ?? this.businessName,
       businessCategoryId: businessCategoryId ?? this.businessCategoryId,
       businessLogo: businessLogo ?? this.businessLogo,
+      authProvider: authProvider ?? this.authProvider,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -182,17 +176,14 @@ class HezmartUser {
       state: json["state"],
       photo: json["photo"],
       passwordChangedAt: json["passwordChangedAt"],
-      passwordResetToken: json["passwordResetToken"],
-      passwordResetExpires: json["passwordResetExpires"],
       role: json["role"],
       status: json["status"],
-      emailVerificationCode: json["emailVerificationCode"],
-      emailVerificationExpires: json["emailVerificationExpires"],
       isEmailVerified: json["isEmailVerified"],
       ninNumber: json["ninNumber"],
       businessName: json["businessName"],
       businessCategoryId: json["businessCategoryId"],
       businessLogo: json["businessLogo"],
+      authProvider: json["authProvider"],
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
     );
@@ -208,23 +199,20 @@ class HezmartUser {
     "state": state,
     "photo": photo,
     "passwordChangedAt": passwordChangedAt,
-    "passwordResetToken": passwordResetToken,
-    "passwordResetExpires": passwordResetExpires,
     "role": role,
     "status": status,
-    "emailVerificationCode": emailVerificationCode,
-    "emailVerificationExpires": emailVerificationExpires,
     "isEmailVerified": isEmailVerified,
     "ninNumber": ninNumber,
     "businessName": businessName,
     "businessCategoryId": businessCategoryId,
     "businessLogo": businessLogo,
+    "authProvider": authProvider,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
   };
 
   @override
   String toString(){
-    return "$id, $firstName, $lastName, $email, $primaryPhone, $primaryAddress, $state, $photo, $passwordChangedAt, $passwordResetToken, $passwordResetExpires, $role, $status, $emailVerificationCode, $emailVerificationExpires, $isEmailVerified, $ninNumber, $businessName, $businessCategoryId, $businessLogo, $createdAt, $updatedAt, ";
+    return "$id, $firstName, $lastName, $email, $primaryPhone, $primaryAddress, $state, $photo, $passwordChangedAt, $role, $status, $isEmailVerified, $ninNumber, $businessName, $businessCategoryId, $businessLogo, $authProvider, $createdAt, $updatedAt, ";
   }
 }

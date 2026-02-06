@@ -11,7 +11,7 @@ class AuthSuccessUseCase {
   void execute(AuthSuccessResponse response) {
     // injector.get<UserBloc>().add(SaveUserEvent(response.data!.user));
     injector.get<UserBloc>().add(SaveUserEvent(response.data!.user!));
-    _userStorage.saveUserToken(response.token.toString());
+    _userStorage.saveUserToken(response.accessToken.toString());
     SessionManager().isLoggedIn = true;
     SessionManager().hasOnboarded = true;
 

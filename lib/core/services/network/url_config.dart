@@ -129,6 +129,9 @@ class UrlConfig {
 // static const refer="https://api.hezmart.com/api/v1/sales-rep/apply";
 //   static const tokensend="https://70da-102-90-116-205.ngrok-free.app/api/v1/notifications/subscribe";
 
+
+
+
 static const String signIn = 'https://304a-197-210-226-95.ngrok-free.app/api/v1/users/login';
   static const String signUp = 'https://304a-197-210-226-95.ngrok-free.app/api/v1/users/signup';
   static const String google = 'https://304a-197-210-226-95.ngrok-free.app/api/v1/users/auth/google';
@@ -171,7 +174,8 @@ static const String signIn = 'https://304a-197-210-226-95.ngrok-free.app/api/v1/
       'https://304a-197-210-226-95.ngrok-free.app/api/v1/cart/item/';
   ///orders
   static const String allorders =
-      'https://304a-197-210-226-95.ngrok-free.app/api/v1/orders';
+  "https://304a-197-210-226-95.ngrok-free.app/api/v1/orders";
+
   static const String singleeorders =
       'https://304a-197-210-226-95.ngrok-free.app/api/v1/orders/';
   static const String rate =

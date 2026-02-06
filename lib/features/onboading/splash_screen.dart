@@ -70,9 +70,9 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _goToNextScreen() {
     if (SessionManager().isLoggedIn) {
-      context.goNamed(PageUrl.home);
+      context.goNamed(PageUrl.signin_screen);
     } else {
-      context.goNamed(PageUrl.home);
+      context.goNamed(PageUrl.signin_screen);
     }
 }
 }

@@ -357,7 +357,7 @@ class NotificationService {
         android: AndroidNotificationDetails(
           channel.id,
           channel.name,
-          icon: "@mipmap/ic_launcher",
+          icon: "@mipmap/launcher_icon",
           importance: Importance.high,
           priority: Priority.high,
           enableLights: true,
