@@ -911,7 +911,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ) {
                                                           final currentProductId =
                                                               prod.id
-                                                                  .toString(); // ✅ Get from loop item
+                                                                  .toString();
 
                                                           return CircleAvatar(
                                                             radius: 15,
