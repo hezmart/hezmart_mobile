@@ -162,7 +162,7 @@ class UrlConfig {
   static const String getvendor =
       'https://backup.hezmart.com/api/v1/users?role=vendor';
   static const String getvendorproducts =
-      'https://backup.hezmart.com/api/v1/products';
+      'https://backup.hezmart.com/api/v1/products?status=active';
 
   ///categories
   static const String allcategory =

@@ -38,7 +38,7 @@ android {
         applicationId = "com.hezmart.app"
         minSdk = flutter.minSdkVersion
         targetSdk = 36
-        versionCode = 22
+        versionCode = 21
         versionName = "1.0.1"
         multiDexEnabled = true
     }
