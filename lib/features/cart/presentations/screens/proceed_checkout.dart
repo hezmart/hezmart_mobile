@@ -77,7 +77,6 @@ class _ProceedCheckoutState extends State<ProceedCheckout> {
   String? selectedDeliverystateId;
   String? selectedDeliveryStaionId;
 
-
   String? minShippingEnable;
   String? shippingMinAmount;
 
@@ -462,7 +461,6 @@ class _ProceedCheckoutState extends State<ProceedCheckout> {
                     deliveryOption,
                     deliveryStateID,
                     deliveryStationId,
-
                   ) {
                     print('Fee: $fee');
                     print('Option: $deliveryOption');
@@ -504,7 +502,6 @@ class _ProceedCheckoutState extends State<ProceedCheckout> {
                             },
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -600,20 +597,20 @@ class _ProceedCheckoutState extends State<ProceedCheckout> {
                     flex: 1,
                     child: BlocConsumer<CartBloc, CartState>(
                       bloc: coupon,
-  listener: _listenToCouponsState,
-  builder: (context, state) {
-    return CustomButton(
-                      child: TextView(
-                        text: "Apply",
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      onPressed: (){
-                        applyCoupon();
+                      listener: _listenToCouponsState,
+                      builder: (context, state) {
+                        return CustomButton(
+                          child: TextView(
+                            text: "Apply",
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          onPressed: () {
+                            applyCoupon();
+                          },
+                        );
                       },
-                    );
-  },
-),
+                    ),
                   ),
                 ],
               ),
@@ -622,24 +619,21 @@ class _ProceedCheckoutState extends State<ProceedCheckout> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: BlocConsumer<CartBloc, CartState>(
-                listener:_listenToCatSTate,
+                listener: _listenToCatSTate,
                 builder: (context, state) {
-                  if(state is CartfailiureState){
+                  if (state is CartfailiureState) {
                     return Center(
                       child: Column(
                         children: [
-
                           AppPromptWidget(
-
-                           message: "Oops! an error occured..",
-                            onTap: (){
+                            message: "Oops! an error occured..",
+                            onTap: () {
                               context.read<CartBloc>().add(GetCartEvent());
                             },
                           ),
                         ],
                       ),
                     );
-
                   }
                   if (state is GetCartSuccessState) {
                     responsenumber = state.response;
@@ -895,49 +889,45 @@ class _ProceedCheckoutState extends State<ProceedCheckout> {
       selectedStateId: selectedDeliverystateId,
     );
 
-    if (selectedPaymentMethod == "crypto") {
+    if (selectedPaymentMethod.isEmpty) {
+      CustomDialogs.showToast("Select payment method");
+    } else if (selectedPaymentMethod == "crypto") {
       checkoutblocT.add(OrderPayCryptoEvent(payload));
     } else {
       checkoutblocT.add(OrderPayTransferEvent(payload));
     }
   }
 
-
-
-  void _listenToCouponsState(BuildContext context, CartState state
-      ) {
-    if(state is CartloadingState){
+  void _listenToCouponsState(BuildContext context, CartState state) {
+    if (state is CartloadingState) {
       CustomDialogs.showLoading(context);
     }
-    if(state is CartfailiureState){
+    if (state is CartfailiureState) {
       context.pop();
       CustomDialogs.error(state.error);
       controller.clear();
-
     }
-    if(state is ApplyCouponSuccesssState){
+    if (state is ApplyCouponSuccesssState) {
       context.pop();
-      CustomDialogs.success(state.response.status??'');
+      CustomDialogs.success(state.response.status ?? '');
       controller.clear();
-
     }
   }
 
   void applyCoupon() {
-    coupon.add(CouponEvent(CouponPayload(code:controller.text.trim())));
+    coupon.add(CouponEvent(CouponPayload(code: controller.text.trim())));
   }
 
   void _listenToCatSTate(BuildContext context, CartState state) {
-    if(state is CartloadingState){
+    if (state is CartloadingState) {
       // CustomDialogs.showLoading(context);
     }
-    if(state is CartfailiureState){
+    if (state is CartfailiureState) {
       // context.pop();
       // CustomDialogs.error(state.error);
       // controller.clear();
-
     }
-    if(state is GetCartSuccessState){
+    if (state is GetCartSuccessState) {
       // context.pop();
     }
   }
@@ -1616,11 +1606,12 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
                                                                         .w500,
                                                               ),
                                                               Text(
-
-                                                                    "Fee: ₦${pickupLocation.fee ?? '0'}",
-                                                              style: TextStyle(  fontWeight:
-                                                              FontWeight
-                                                                  .w500,),
+                                                                "Fee: ₦${pickupLocation.fee ?? '0'}",
+                                                                style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
                                                               ),
                                                             ],
                                                           ),
