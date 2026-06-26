@@ -48,7 +48,9 @@ class _AllProductsState extends State<AllProducts> {
   void initState() {
     // TODO: implement initState
 
-    likedproduct.add(GetfavouriteEvent());
+    if (injector.get<UserBloc>().appUser != null) {
+      likedproduct.add(GetfavouriteEvent());
+    }
     products.add(GetAllProductsEvent());
     super.initState();
   }

@@ -33,8 +33,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
       emit(FavouriteGetSuccessState(response));
     } catch (e) {
       emit(FavouritefailiureState(e.toString()));
-      rethrow;
-      // TODO
+      // Don't rethrow - handle gracefully
     }
   }
 
@@ -49,8 +48,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
       emit(FavouritelikeSuccessState(response,event.id));
     } catch (e) {
       emit(FavouritefailiureState(e.toString()));
-      rethrow;
-      // TODO
+      // Don't rethrow - handle gracefully
     }
   }
 
@@ -62,8 +60,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
       emit(FavouriteUnlikeSuccessState(response,event.id));
     } catch (e) {
       emit(FavouritefailiureState(e.toString()));
-      rethrow;
-      // TODO
+      // Don't rethrow - handle gracefully
     }
   }
 }

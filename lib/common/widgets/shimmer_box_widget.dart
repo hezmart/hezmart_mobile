@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hezmart/core/theme/pallets.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ShimerView extends StatelessWidget {
   const ShimerView({super.key});
@@ -34,7 +35,6 @@ class ShimerView extends StatelessWidget {
               ],
             ),
             10.verticalSpace,
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -50,7 +50,6 @@ class ShimerView extends StatelessWidget {
                 ShimmerLoading(height: 100, width: 150),
               ],
             ),
-
             10.verticalSpace,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,13 +74,17 @@ class ShimmerLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Pallets.grey95.withOpacity(0.6),
+    return Shimmer.fromColors(
+      baseColor: Pallets.grey95.withOpacity(0.6),
+      highlightColor: Pallets.grey95.withOpacity(0.3),
+      child: Container(
+        height: height,
+        width: width,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Pallets.grey95.withOpacity(0.6),
+        ),
       ),
     );
   }

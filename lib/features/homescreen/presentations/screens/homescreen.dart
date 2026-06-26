@@ -71,7 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    likedproduct.add(GetfavouriteEvent());
+    if (injector.get<UserBloc>().appUser != null) {
+      likedproduct.add(GetfavouriteEvent());
+    }
     products.add(GetAllProductsEvent());
     allcat.add(AllCategoryEvent());
 
@@ -108,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state is ProductsFailiureState) {
                 return SizedBox(
                   height: 1.sh,
-
                   child: Center(
                     child: AppPromptWidget(
                       onTap: () {
@@ -117,6 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 );
+              }
+              if (state is ProductsloadingState) {
+                return const ShimerView();
               }
               if (state is ProductsSuccessState) {
                 String formatNumberWithCommas(String number) {

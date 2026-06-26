@@ -45,7 +45,7 @@ class AppConfig {
     WidgetsFlutterBinding.ensureInitialized();
 
     // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-    await initFirebaseServices();
+    // await initFirebaseServices();
     // await SessionManager.instance.init();
     // await Hive.initFlutter();
     await Upgrader.clearSavedSettings();
